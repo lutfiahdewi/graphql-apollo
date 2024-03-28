@@ -1,4 +1,4 @@
-import { objectType, extendType, intArg, inputObjectType } from "nexus";
+import { objectType, extendType, nonNull, intArg, inputObjectType } from "nexus";
 import { Prisma } from "@prisma/client";
 import { context } from "../context";
 
@@ -9,7 +9,9 @@ export const KategoriIndikator = objectType({
     t.nonNull.string("branch_kd");
     t.nonNull.id("indikator_id");
     t.nonNull.id("kategori_id");
-    t.nonNull.string("bobot");
+    t.nullable.float("bobot");
+    t.nonNull.int("no_urut");
+    t.nullable.string("perbandingan");
   },
 });
 
@@ -19,7 +21,7 @@ export const KategoriIndikatorQuery = extendType({
     t.nonNull.field("kategoriIndikator", {
       type: "kategoriIndikator",
       args: {
-        id: intArg(),
+        id: nonNull(intArg()),
       },
       resolve(parent, args, context, info) {
         const kategoriIndikator = context.prisma.kategoriIndikator.findUnique({
@@ -44,9 +46,11 @@ export const KategoriIndikatorInputType = inputObjectType({
   name: "KategoriIndikatorInputType",
   definition(t) {
     t.nonNull.string("branch_kd");
-    t.nonNull.id("indikator_id");
-    t.nonNull.id("kategori_id");
-    t.nonNull.string("bobot");
+    t.nonNull.string("indikator_id");
+    t.nonNull.string("kategori_id");
+    t.nullable.float("bobot");
+    t.nonNull.int("no_urut");
+    t.nullable.string("perbandingan");
   },
 });
 
@@ -55,35 +59,39 @@ export const KategoriIndikatorMutation = extendType({
   definition(t) {
     t.nonNull.field("createKategoriIndikator", {
       type: "kategoriIndikator",
-      args: { input: KategoriIndikatorInputType },
+      args: { input: nonNull(KategoriIndikatorInputType) },
       resolve(parent, args, context, info) {
-        const { branch_kd, indikator_id, kategori_id, bobot } = args.input;
+        const { branch_kd, indikator_id, kategori_id, bobot, no_urut, perbandingan} = args.input;
         const newKategoriIndikator = context.prisma.KategoriIndikator.create({
           data: {
             branch_kd,
-            indikator_id,
-            kategori_id,
+            indikator_id: parseInt(indikator_id),
+            kategori_id: parseInt(kategori_id),
             bobot,
+            no_urut,
+            perbandingan
           },
         });
         return newKategoriIndikator;
       },
     });
 
-    t.nonNull.field("updateIndikator", {
+    t.nonNull.field("updateKategoriIndikator", {
       type: "kategoriIndikator",
-      args: { input: KategoriIndikatorInputType, id: intArg() },
+      args: { input: nonNull(KategoriIndikatorInputType), id: nonNull(intArg()) },
       resolve(parent, args, context, info) {
-        const { branch_kd, indikator_id, kategori_id, bobot } = args.input;
+        const {branch_kd, indikator_id, kategori_id, bobot, no_urut, perbandingan } = args.input;
         const updatedKategoriIndikator = context.prisma.kategoriIndikator.update({
           where: {
             kategoriIndikator_id: args.id,
           },
           data: {
             branch_kd,
-            indikator_id,
-            kategori_id,
+            indikator_id: parseInt(indikator_id),
+            kategori_id: parseInt(kategori_id),
             bobot,
+            no_urut,
+            perbandingan
           },
         });
         return updatedKategoriIndikator;
@@ -92,7 +100,7 @@ export const KategoriIndikatorMutation = extendType({
 
     t.nullable.field("deleteKategoriIndikator", {
       type: "kategoriIndikator",
-      args: { id: intArg() },
+      args: { id: nonNull(intArg()) },
       resolve(parent, args, context, info) {
         const deletedKategoriIndikator = context.prisma.kategoriIndikator.delete({
           where: {

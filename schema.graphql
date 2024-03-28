@@ -15,14 +15,28 @@ scalar DateTime
 input IndikatorInputType {
   branch_kd: String!
   definisi: String!
+  is_benefit: String!
   nama: String!
 }
 
-input KategoriIndikatorInputType {
-  bobot: String!
+input IndikatorNestedInputType {
+  bobot: Float
   branch_kd: String!
-  indikator_id: ID!
-  kategori_id: ID!
+  definisi: String!
+  is_benefit: String!
+  kategori_id: String!
+  nama: String!
+  no_urut: Int!
+  perbandingan: String
+}
+
+input KategoriIndikatorInputType {
+  bobot: Float
+  branch_kd: String!
+  indikator_id: String!
+  kategori_id: String!
+  no_urut: Int!
+  perbandingan: String
 }
 
 input KategoriInputType {
@@ -31,31 +45,37 @@ input KategoriInputType {
 }
 
 type Mutation {
-  createIndikator(input: IndikatorInputType): indikator!
-  createKategori(input: KategoriInputType): kategori!
-  createKategoriIndikator(input: KategoriIndikatorInputType): kategoriIndikator!
-  deleteIndikator(id: Int): indikator
-  deleteKategori(id: Int): kategori
-  deleteKategoriIndikator(id: Int): kategoriIndikator
+  createIndikator(input: IndikatorInputType!): indikator!
+  createIndikatorFull(input: IndikatorNestedInputType!): kategoriIndikator!
+  createIndikatorNested(input: IndikatorNestedInputType!): indikator!
+  createKategori(input: KategoriInputType!): kategori!
+  createKategoriIndikator(input: KategoriIndikatorInputType!): kategoriIndikator!
+  createManyIndikator(input: [IndikatorInputType!]!): Int!
+  deleteIndikator(id: Int!): indikator
+  deleteKategori(id: Int!): kategori
+  deleteKategoriIndikator(id: Int!): kategoriIndikator
   login(email: String!, password: String!): AuthPayload!
   signup(email: String!, password: String!, username: String!): AuthPayload!
-  updateIndikator(id: Int, input: KategoriIndikatorInputType): kategoriIndikator!
-  updateKategori(id: Int, input: KategoriInputType): kategori!
+  updateIndikator(id: Int!, input: IndikatorInputType!): indikator!
+  updateKategori(id: Int!, input: KategoriInputType!): kategori!
+  updateKategoriIndikator(id: Int!, input: KategoriIndikatorInputType!): kategoriIndikator!
 }
 
 type Query {
   allIndikator: [indikator!]!
   allKategori: [kategori!]!
   allKategoriIndikator: [kategoriIndikator!]!
-  indikator(id: Int): indikator!
-  kategori(id: Int): kategori!
-  kategoriIndikator(id: Int): kategoriIndikator!
+  indikator(id: Int!): indikator!
+  kategori(id: Int!): kategori!
+  kategoriIndikator(id: Int!): kategoriIndikator!
+  someIndikator(id: [Int!]!): [indikator!]!
 }
 
 type indikator {
   branch_kd: String!
   definisi: String!
   indikator_id: ID!
+  is_benefit: Int!
   nama: String!
 }
 
@@ -66,11 +86,13 @@ type kategori {
 }
 
 type kategoriIndikator {
-  bobot: String!
+  bobot: Float
   branch_kd: String!
   indikator_id: ID!
   kategoriIndikator_id: ID!
   kategori_id: ID!
+  no_urut: Int!
+  perbandingan: String
 }
 
 type user {

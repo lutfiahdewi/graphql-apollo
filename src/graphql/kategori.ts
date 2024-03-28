@@ -1,4 +1,4 @@
-import { objectType, extendType, intArg, inputObjectType } from "nexus";
+import { objectType, extendType, intArg, inputObjectType, nonNull } from "nexus";
 import { Prisma } from "@prisma/client";
 import { context } from "../context";
 
@@ -17,7 +17,7 @@ export const KategoriQuery = extendType({
     t.nonNull.field("kategori", {
       type: "kategori",
       args: {
-        id: intArg(),
+        id: nonNull(intArg()),
       },
       resolve(parent, args, context, info) {
         const kategori = context.prisma.kategori.findUnique({
@@ -51,7 +51,7 @@ export const KategoriMutation = extendType({
   definition(t) {
     t.nonNull.field("createKategori", {
       type: "kategori",
-      args: { input: KategoriInputType },
+      args: { input: nonNull(KategoriInputType) },
       resolve(parent, args, context, info) {
         const { nama, definisi } = args.input;
         const newKategori = context.prisma.kategori.create({
@@ -66,7 +66,7 @@ export const KategoriMutation = extendType({
 
     t.nonNull.field("updateKategori", {
       type: "kategori",
-      args: { input: KategoriInputType, id: intArg() },
+      args: { input: nonNull(KategoriInputType), id: nonNull(intArg()) },
       resolve(parent, args, context, info) {
         const { nama, definisi } = args.input;
         const updatedKategori = context.prisma.kategori.update({
@@ -84,7 +84,7 @@ export const KategoriMutation = extendType({
 
     t.nullable.field("deleteKategori", {
       type: "kategori",
-      args: { id: intArg() },
+      args: { id: nonNull(intArg()) },
       resolve(parent, args, context, info) {
         const deletedKategori = context.prisma.kategori.delete({
           where: {

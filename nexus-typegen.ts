@@ -32,13 +32,26 @@ export interface NexusGenInputs {
   IndikatorInputType: { // input type
     branch_kd: string; // String!
     definisi: string; // String!
+    is_benefit: string; // String!
     nama: string; // String!
   }
-  KategoriIndikatorInputType: { // input type
-    bobot: string; // String!
+  IndikatorNestedInputType: { // input type
+    bobot?: number | null; // Float
     branch_kd: string; // String!
-    indikator_id: string; // ID!
-    kategori_id: string; // ID!
+    definisi: string; // String!
+    is_benefit: string; // String!
+    kategori_id: string; // String!
+    nama: string; // String!
+    no_urut: number; // Int!
+    perbandingan?: string | null; // String
+  }
+  KategoriIndikatorInputType: { // input type
+    bobot?: number | null; // Float
+    branch_kd: string; // String!
+    indikator_id: string; // String!
+    kategori_id: string; // String!
+    no_urut: number; // Int!
+    perbandingan?: string | null; // String
   }
   KategoriInputType: { // input type
     definisi: string; // String!
@@ -69,6 +82,7 @@ export interface NexusGenObjects {
     branch_kd: string; // String!
     definisi: string; // String!
     indikator_id: string; // ID!
+    is_benefit: number; // Int!
     nama: string; // String!
   }
   kategori: { // root type
@@ -77,11 +91,13 @@ export interface NexusGenObjects {
     nama: string; // String!
   }
   kategoriIndikator: { // root type
-    bobot: string; // String!
+    bobot?: number | null; // Float
     branch_kd: string; // String!
     indikator_id: string; // ID!
     kategoriIndikator_id: string; // ID!
     kategori_id: string; // ID!
+    no_urut: number; // Int!
+    perbandingan?: string | null; // String
   }
   user: { // root type
     ID: number; // Int!
@@ -108,15 +124,19 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createIndikator: NexusGenRootTypes['indikator']; // indikator!
+    createIndikatorFull: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
+    createIndikatorNested: NexusGenRootTypes['indikator']; // indikator!
     createKategori: NexusGenRootTypes['kategori']; // kategori!
     createKategoriIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
+    createManyIndikator: number; // Int!
     deleteIndikator: NexusGenRootTypes['indikator'] | null; // indikator
     deleteKategori: NexusGenRootTypes['kategori'] | null; // kategori
     deleteKategoriIndikator: NexusGenRootTypes['kategoriIndikator'] | null; // kategoriIndikator
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
-    updateIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
+    updateIndikator: NexusGenRootTypes['indikator']; // indikator!
     updateKategori: NexusGenRootTypes['kategori']; // kategori!
+    updateKategoriIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
   }
   Query: { // field return type
     allIndikator: NexusGenRootTypes['indikator'][]; // [indikator!]!
@@ -125,11 +145,13 @@ export interface NexusGenFieldTypes {
     indikator: NexusGenRootTypes['indikator']; // indikator!
     kategori: NexusGenRootTypes['kategori']; // kategori!
     kategoriIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
+    someIndikator: NexusGenRootTypes['indikator'][]; // [indikator!]!
   }
   indikator: { // field return type
     branch_kd: string; // String!
     definisi: string; // String!
     indikator_id: string; // ID!
+    is_benefit: number; // Int!
     nama: string; // String!
   }
   kategori: { // field return type
@@ -138,11 +160,13 @@ export interface NexusGenFieldTypes {
     nama: string; // String!
   }
   kategoriIndikator: { // field return type
-    bobot: string; // String!
+    bobot: number | null; // Float
     branch_kd: string; // String!
     indikator_id: string; // ID!
     kategoriIndikator_id: string; // ID!
     kategori_id: string; // ID!
+    no_urut: number; // Int!
+    perbandingan: string | null; // String
   }
   user: { // field return type
     ID: number; // Int!
@@ -159,15 +183,19 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createIndikator: 'indikator'
+    createIndikatorFull: 'kategoriIndikator'
+    createIndikatorNested: 'indikator'
     createKategori: 'kategori'
     createKategoriIndikator: 'kategoriIndikator'
+    createManyIndikator: 'Int'
     deleteIndikator: 'indikator'
     deleteKategori: 'kategori'
     deleteKategoriIndikator: 'kategoriIndikator'
     login: 'AuthPayload'
     signup: 'AuthPayload'
-    updateIndikator: 'kategoriIndikator'
+    updateIndikator: 'indikator'
     updateKategori: 'kategori'
+    updateKategoriIndikator: 'kategoriIndikator'
   }
   Query: { // field return type name
     allIndikator: 'indikator'
@@ -176,11 +204,13 @@ export interface NexusGenFieldTypeNames {
     indikator: 'indikator'
     kategori: 'kategori'
     kategoriIndikator: 'kategoriIndikator'
+    someIndikator: 'indikator'
   }
   indikator: { // field return type name
     branch_kd: 'String'
     definisi: 'String'
     indikator_id: 'ID'
+    is_benefit: 'Int'
     nama: 'String'
   }
   kategori: { // field return type name
@@ -189,11 +219,13 @@ export interface NexusGenFieldTypeNames {
     nama: 'String'
   }
   kategoriIndikator: { // field return type name
-    bobot: 'String'
+    bobot: 'Float'
     branch_kd: 'String'
     indikator_id: 'ID'
     kategoriIndikator_id: 'ID'
     kategori_id: 'ID'
+    no_urut: 'Int'
+    perbandingan: 'String'
   }
   user: { // field return type name
     ID: 'Int'
@@ -206,22 +238,31 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Mutation: {
     createIndikator: { // args
-      input?: NexusGenInputs['IndikatorInputType'] | null; // IndikatorInputType
+      input: NexusGenInputs['IndikatorInputType']; // IndikatorInputType!
+    }
+    createIndikatorFull: { // args
+      input: NexusGenInputs['IndikatorNestedInputType']; // IndikatorNestedInputType!
+    }
+    createIndikatorNested: { // args
+      input: NexusGenInputs['IndikatorNestedInputType']; // IndikatorNestedInputType!
     }
     createKategori: { // args
-      input?: NexusGenInputs['KategoriInputType'] | null; // KategoriInputType
+      input: NexusGenInputs['KategoriInputType']; // KategoriInputType!
     }
     createKategoriIndikator: { // args
-      input?: NexusGenInputs['KategoriIndikatorInputType'] | null; // KategoriIndikatorInputType
+      input: NexusGenInputs['KategoriIndikatorInputType']; // KategoriIndikatorInputType!
+    }
+    createManyIndikator: { // args
+      input: NexusGenInputs['IndikatorInputType'][]; // [IndikatorInputType!]!
     }
     deleteIndikator: { // args
-      id?: number | null; // Int
+      id: number; // Int!
     }
     deleteKategori: { // args
-      id?: number | null; // Int
+      id: number; // Int!
     }
     deleteKategoriIndikator: { // args
-      id?: number | null; // Int
+      id: number; // Int!
     }
     login: { // args
       email: string; // String!
@@ -233,23 +274,30 @@ export interface NexusGenArgTypes {
       username: string; // String!
     }
     updateIndikator: { // args
-      id?: number | null; // Int
-      input?: NexusGenInputs['KategoriIndikatorInputType'] | null; // KategoriIndikatorInputType
+      id: number; // Int!
+      input: NexusGenInputs['IndikatorInputType']; // IndikatorInputType!
     }
     updateKategori: { // args
-      id?: number | null; // Int
-      input?: NexusGenInputs['KategoriInputType'] | null; // KategoriInputType
+      id: number; // Int!
+      input: NexusGenInputs['KategoriInputType']; // KategoriInputType!
+    }
+    updateKategoriIndikator: { // args
+      id: number; // Int!
+      input: NexusGenInputs['KategoriIndikatorInputType']; // KategoriIndikatorInputType!
     }
   }
   Query: {
     indikator: { // args
-      id?: number | null; // Int
+      id: number; // Int!
     }
     kategori: { // args
-      id?: number | null; // Int
+      id: number; // Int!
     }
     kategoriIndikator: { // args
-      id?: number | null; // Int
+      id: number; // Int!
+    }
+    someIndikator: { // args
+      id: number[]; // [Int!]!
     }
   }
 }

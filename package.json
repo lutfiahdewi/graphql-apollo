@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "ts-node-dev --respawn ./src/index.ts",
+    "dev4": "ts-node-dev --no-notify --respawn --transpile-only src/server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --transpile-only --no-notify --exit-child src/index.ts",
     "generate": "ts-node --transpile-only src/schema.ts"
   },
   "keywords": [],
@@ -19,9 +20,11 @@
     "typescript": "^5.4.3"
   },
   "dependencies": {
+    "@apollo/server": "^4.10.2",
     "@prisma/client": "^5.11.0",
     "apollo-server": "^3.13.0",
     "bcryptjs": "^2.4.3",
+    "fs": "^0.0.1-security",
     "graphql": "^16.8.1",
     "graphql-scalars": "^1.23.0",
     "jsonwebtoken": "^9.0.2",
