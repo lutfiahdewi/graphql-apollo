@@ -1,17 +1,16 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { decodeAuthHeader, AuthTokenPayload } from "./utils/auth";
 import { Request } from "express";
 
 export const prisma = new PrismaClient();
 
 export interface Context {
-  // 1
   prisma: PrismaClient;
-  userId?: number; // 1
+  userId?: number;
 }
 
+// Context for v3
 export const context = async ({ req }: { req: Request }): Promise<Context> => {
-  // 2
   const token = req && req.headers.authorization ? decodeAuthHeader(req.headers.authorization) : null;
   return {
     prisma,
@@ -19,6 +18,15 @@ export const context = async ({ req }: { req: Request }): Promise<Context> => {
   };
 };
 
+//Context for v4
 export const createContext = async () => ({
-  prisma: prisma,
+  prisma: new PrismaClient({
+    /*transactionOptions: {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+      maxWait: 30000, // default: 2000
+      timeout: 30000, // default: 5000
+    },*/
+	log: ['query', 'info', 'warn', 'error'],
+  }),
+
 });

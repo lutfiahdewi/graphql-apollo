@@ -1,7 +1,7 @@
 import { objectType, extendType, intArg, nonNull, inputObjectType, list } from "nexus";
 import { KategoriIndikator } from "./kategoriIndikator";
 import { Prisma } from "@prisma/client";
-import { context } from "../context";
+import { context, createContext, prisma} from "../context";
 
 interface inputIndikator {
   branch_kd: String;
@@ -20,6 +20,20 @@ export const Indikator = objectType({
     t.nonNull.string("definisi");
   },
 });
+export const IndikatorNested = objectType({
+  name: "indikatorNested",
+  definition(t) {
+    t.nonNull.id("indikator_id");
+    t.nonNull.string("branch_kd");
+    t.nonNull.string("nama");
+    t.nonNull.int("is_benefit");
+    t.nonNull.string("definisi");
+    t.nonNull.list.nonNull.field({
+      type: "kategoriIndikator",
+      name: "KategoriIndikator",
+    });
+  },
+});
 
 export const IndikatorQuery = extendType({
   type: "Query",
@@ -29,7 +43,7 @@ export const IndikatorQuery = extendType({
       args: {
         id: nonNull(intArg()),
       },
-      resolve(parent, args, context, info) {
+      resolve(_parent, args, context, _info) {
         const indikator = context.prisma.indikator.findUnique({
           where: {
             indikator_id: args.id,
@@ -40,7 +54,7 @@ export const IndikatorQuery = extendType({
     });
     t.nonNull.list.nonNull.field("allIndikator", {
       type: "indikator",
-      resolve(parent, args, context, info) {
+      resolve(_parent, _args, context, _info) {
         const indikator = context.prisma.indikator.findMany();
         return indikator;
       },
@@ -50,7 +64,7 @@ export const IndikatorQuery = extendType({
       args: {
         id: nonNull(list(nonNull(intArg()))),
       },
-      resolve(parent, args, context, info) {
+      resolve(_parent, _args, context, _info) {
         const indikator = context.prisma.indikator.findMany();
         return indikator;
       },
@@ -88,7 +102,7 @@ export const IndikatorMutation = extendType({
     t.nonNull.field("createIndikator", {
       type: "indikator",
       args: { input: nonNull(IndikatorInputType) },
-      resolve(parent, args, context, info) {
+      resolve(_parent, args, context, _info) {
         const { branch_kd, nama, definisi, is_benefit } = args.input;
         const newIndikator = context.prisma.indikator.create({
           data: {
@@ -102,7 +116,7 @@ export const IndikatorMutation = extendType({
       },
     });
 
-    t.nonNull.field("createIndikatorFull", {
+    /*t.nonNull.field("createIndikatorFull", {
       type: "kategoriIndikator",
       args: { input: nonNull(IndikatorNestedInputType) },
       resolve(parent, args, context, info) {
@@ -138,14 +152,14 @@ export const IndikatorMutation = extendType({
         });
         return newKategoriIndikator;
       },
-    });
+    });*/
 
     t.nonNull.field("createIndikatorNested", {
-      type: "indikator",
+      type: "indikatorNested",
       args: { input: nonNull(IndikatorNestedInputType) },
-      resolve(parent, args, context, info) {
-        const { branch_kd, nama, definisi, is_benefit, kategori_id,  bobot, no_urut, perbandingan} = args.input;
-        const newIndikator = context.prisma.indikator.create({
+      resolve(_parent, args, context, _info) {
+        const { branch_kd, nama, definisi, is_benefit, kategori_id, bobot, no_urut, perbandingan } = args.input;
+        /*const newIndikator = context.prisma.indikator.create({
           data: {
             branch_kd,
             nama,
@@ -165,18 +179,19 @@ export const IndikatorMutation = extendType({
               }],
             },
           },
-          // include: {
-          //   KategoriIndikator: true,
-          // },
+          include: {
+            KategoriIndikator: true,
+          },
         });
-        return newIndikator;
+        return newIndikator;*/
+        return creationNested(branch_kd, nama, definisi, is_benefit, kategori_id, bobot, no_urut, perbandingan);
       },
     });
 
     t.nonNull.field("createManyIndikator", {
       type: "Int",
       args: { input: nonNull(list(nonNull(IndikatorInputType))) },
-      resolve(parent, args, context, info) {
+      resolve(_parent, args, context, _info) {
         const { list } = args.input;
         let listInput: inputIndikator[] = [];
         for (let i = 0; i < list.length; i++) {
@@ -198,7 +213,7 @@ export const IndikatorMutation = extendType({
     t.nonNull.field("updateIndikator", {
       type: "indikator",
       args: { input: nonNull(IndikatorInputType), id: nonNull(intArg()) },
-      resolve(parent, args, context, info) {
+      resolve(_parent, args, context, _info) {
         const { branch_kd, nama, definisi, is_benefit } = args.input;
         const updatedIndikator = context.prisma.indikator.update({
           where: {
@@ -218,7 +233,7 @@ export const IndikatorMutation = extendType({
     t.nullable.field("deleteIndikator", {
       type: "indikator",
       args: { id: nonNull(intArg()) },
-      resolve(parent, args, context, info) {
+      resolve(_parent, args, context, _info) {
         const deletedIndikator = context.prisma.indikator.delete({
           where: {
             indikator_id: args.id,
@@ -235,3 +250,133 @@ export const IndikatorMutation = extendType({
     });
   },
 });
+
+function creationNested(branch_kd : string, nama : string, definisi : string, is_benefit : string, kategori_id : string, bobot:number, no_urut:number, perbandingan:string) {
+  return prisma.$transaction(
+    async (tx) => {
+    // 1. createIndikator
+    const indikator = await tx.indikator.create({
+      data: {
+        branch_kd,
+        nama,
+        definisi,
+        is_benefit: parseInt(is_benefit),
+      },
+    });
+    // 2. get indikator_id
+    const indikator_id : string = (indikator.indikator_id).toString()
+
+    // 3. create kategoriIndikator
+    const kategoriIndikator = await tx.kategoriIndikator.create({
+      data: {
+        branch_kd,
+        indikator: {
+          connect: {
+            indikator_id: parseInt(indikator_id),
+          }
+        },
+        kategori: {
+          connect: {
+            kategori_id: parseInt(kategori_id),
+          }
+        },
+        bobot,
+        no_urut,
+        perbandingan
+      },
+    });
+
+    // 4. query connected indikator(?)
+    const nestedIndikator = await tx.indikator.findUnique({
+      where: {
+        indikator_id: parseInt(indikator_id),
+      },
+      include: {
+        KategoriIndikator: true,
+      }
+    })
+    return nestedIndikator;
+  },
+  {
+    isolationLevel: Prisma.TransactionIsolationLevel.ReadUncommitted,
+    maxWait: 30000, // default: 2000
+    timeout: 30000, // default: 5000
+  },
+  )
+}
+
+/*
+const newIndikator = context.prisma.indikator.create({
+          data: {
+            branch_kd,
+            nama,
+            definisi,
+            is_benefit: parseInt(is_benefit),
+            KategoriIndikator: {
+              create: [{
+                branch_kd,
+                kategori: {
+                  connect: {
+                    kategori_id: parseInt(kategori_id),
+                  }
+                },
+                bobot,
+                no_urut,
+                perbandingan,
+              }],
+            },
+          },
+          include: {
+            KategoriIndikator: true,
+          },
+        });
+        return newIndikator;
+        */
+
+/*const MAX_RETRIES = 5;
+        let retries = 0;
+        let [newIndikator] = [undefined];
+        while (retries < MAX_RETRIES) {
+          try {
+            [newIndikator] = await context.prisma.$transaction(
+              [
+                context.prisma.indikator.create({
+                  data: {
+                    branch_kd,
+                    nama,
+                    definisi,
+                    is_benefit: parseInt(is_benefit),
+                    KategoriIndikator: {
+                      create: [
+                        {
+                          branch_kd,
+                          kategori: {
+                            connect: {
+                              kategori_id: parseInt(kategori_id),
+                            },
+                          },
+                          bobot,
+                          no_urut,
+                          perbandingan,
+                        },
+                      ],
+                    },
+                  },
+                  include: {
+                    KategoriIndikator: true,
+                  },
+                }),
+              ],
+              {
+                isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
+              }
+            );
+            return newIndikator;
+          } catch (error: unknown) {
+            if (error.code === "P2034") {
+              retries++;
+              continue;
+            }
+            throw error;
+          }
+        }*/

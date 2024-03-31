@@ -46,8 +46,7 @@ input KategoriInputType {
 
 type Mutation {
   createIndikator(input: IndikatorInputType!): indikator!
-  createIndikatorFull(input: IndikatorNestedInputType!): kategoriIndikator!
-  createIndikatorNested(input: IndikatorNestedInputType!): indikator!
+  createIndikatorNested(input: IndikatorNestedInputType!): indikatorNested!
   createKategori(input: KategoriInputType!): kategori!
   createKategoriIndikator(input: KategoriIndikatorInputType!): kategoriIndikator!
   createManyIndikator(input: [IndikatorInputType!]!): Int!
@@ -72,6 +71,15 @@ type Query {
 }
 
 type indikator {
+  branch_kd: String!
+  definisi: String!
+  indikator_id: ID!
+  is_benefit: Int!
+  nama: String!
+}
+
+type indikatorNested {
+  KategoriIndikator: [kategoriIndikator!]!
   branch_kd: String!
   definisi: String!
   indikator_id: ID!

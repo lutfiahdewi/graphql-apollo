@@ -85,6 +85,14 @@ export interface NexusGenObjects {
     is_benefit: number; // Int!
     nama: string; // String!
   }
+  indikatorNested: { // root type
+    KategoriIndikator: NexusGenRootTypes['kategoriIndikator'][]; // [kategoriIndikator!]!
+    branch_kd: string; // String!
+    definisi: string; // String!
+    indikator_id: string; // ID!
+    is_benefit: number; // Int!
+    nama: string; // String!
+  }
   kategori: { // root type
     definisi: string; // String!
     kategori_id: string; // ID!
@@ -124,8 +132,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createIndikator: NexusGenRootTypes['indikator']; // indikator!
-    createIndikatorFull: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
-    createIndikatorNested: NexusGenRootTypes['indikator']; // indikator!
+    createIndikatorNested: NexusGenRootTypes['indikatorNested']; // indikatorNested!
     createKategori: NexusGenRootTypes['kategori']; // kategori!
     createKategoriIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
     createManyIndikator: number; // Int!
@@ -148,6 +155,14 @@ export interface NexusGenFieldTypes {
     someIndikator: NexusGenRootTypes['indikator'][]; // [indikator!]!
   }
   indikator: { // field return type
+    branch_kd: string; // String!
+    definisi: string; // String!
+    indikator_id: string; // ID!
+    is_benefit: number; // Int!
+    nama: string; // String!
+  }
+  indikatorNested: { // field return type
+    KategoriIndikator: NexusGenRootTypes['kategoriIndikator'][]; // [kategoriIndikator!]!
     branch_kd: string; // String!
     definisi: string; // String!
     indikator_id: string; // ID!
@@ -183,8 +198,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createIndikator: 'indikator'
-    createIndikatorFull: 'kategoriIndikator'
-    createIndikatorNested: 'indikator'
+    createIndikatorNested: 'indikatorNested'
     createKategori: 'kategori'
     createKategoriIndikator: 'kategoriIndikator'
     createManyIndikator: 'Int'
@@ -207,6 +221,14 @@ export interface NexusGenFieldTypeNames {
     someIndikator: 'indikator'
   }
   indikator: { // field return type name
+    branch_kd: 'String'
+    definisi: 'String'
+    indikator_id: 'ID'
+    is_benefit: 'Int'
+    nama: 'String'
+  }
+  indikatorNested: { // field return type name
+    KategoriIndikator: 'kategoriIndikator'
     branch_kd: 'String'
     definisi: 'String'
     indikator_id: 'ID'
@@ -239,9 +261,6 @@ export interface NexusGenArgTypes {
   Mutation: {
     createIndikator: { // args
       input: NexusGenInputs['IndikatorInputType']; // IndikatorInputType!
-    }
-    createIndikatorFull: { // args
-      input: NexusGenInputs['IndikatorNestedInputType']; // IndikatorNestedInputType!
     }
     createIndikatorNested: { // args
       input: NexusGenInputs['IndikatorNestedInputType']; // IndikatorNestedInputType!

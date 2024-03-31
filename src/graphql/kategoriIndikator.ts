@@ -1,6 +1,4 @@
 import { objectType, extendType, nonNull, intArg, inputObjectType } from "nexus";
-import { Prisma } from "@prisma/client";
-import { context } from "../context";
 
 export const KategoriIndikator = objectType({
   name: "kategoriIndikator",
@@ -62,11 +60,19 @@ export const KategoriIndikatorMutation = extendType({
       args: { input: nonNull(KategoriIndikatorInputType) },
       resolve(parent, args, context, info) {
         const { branch_kd, indikator_id, kategori_id, bobot, no_urut, perbandingan} = args.input;
-        const newKategoriIndikator = context.prisma.KategoriIndikator.create({
+        const newKategoriIndikator = context.prisma.kategoriIndikator.create({
           data: {
             branch_kd,
-            indikator_id: parseInt(indikator_id),
-            kategori_id: parseInt(kategori_id),
+            indikator: {
+              connect: {
+                indikator_id: parseInt(indikator_id),
+              }
+            },
+            kategori: {
+              connect: {
+                kategori_id: parseInt(kategori_id),
+              }
+            },
             bobot,
             no_urut,
             perbandingan
@@ -87,8 +93,16 @@ export const KategoriIndikatorMutation = extendType({
           },
           data: {
             branch_kd,
-            indikator_id: parseInt(indikator_id),
-            kategori_id: parseInt(kategori_id),
+            indikator: {
+              connect: {
+                indikator_id: parseInt(indikator_id),
+              }
+            },
+            kategori: {
+              connect: {
+                kategori_id: parseInt(kategori_id),
+              }
+            },
             bobot,
             no_urut,
             perbandingan

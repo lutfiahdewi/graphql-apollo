@@ -1,14 +1,17 @@
 # GraphQL API build in Apollo Server
 
-## Build
-`npm install `
+## Build and Run App
+`npm install `\n
 Generate prisma schema (create .env first for connect t db)
-`npx prisma generate`
-
+`npx prisma generate`\n
+There are two version of apollo server, v3 and v3. Currently transitioning from v3 to v4, so both version are kept. For running Apollo Server v3:
+`npm run dev`
+For running Apollo Server v4:
+`npm run dev4`
 
 ## Migration through Prisma
 script: 
-`npx prisma migrate dev --name added-tags`
+`npx prisma migrate dev --name 'added-tags'`
 
 ## Sets Database for Prisma
 make .env and read docs :v
