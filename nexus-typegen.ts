@@ -108,9 +108,9 @@ export interface NexusGenObjects {
     perbandingan?: string | null; // String
   }
   user: { // root type
-    ID: number; // Int!
     email: string; // String!
     is_pegawai?: boolean | null; // Boolean
+    user_id: number; // Int!
     username?: string | null; // String
   }
 }
@@ -184,9 +184,9 @@ export interface NexusGenFieldTypes {
     perbandingan: string | null; // String
   }
   user: { // field return type
-    ID: number; // Int!
     email: string; // String!
     is_pegawai: boolean | null; // Boolean
+    user_id: number; // Int!
     username: string | null; // String
   }
 }
@@ -250,9 +250,9 @@ export interface NexusGenFieldTypeNames {
     perbandingan: 'String'
   }
   user: { // field return type name
-    ID: 'Int'
     email: 'String'
     is_pegawai: 'Boolean'
+    user_id: 'Int'
     username: 'String'
   }
 }

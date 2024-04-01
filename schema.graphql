@@ -104,8 +104,8 @@ type kategoriIndikator {
 }
 
 type user {
-  ID: Int!
   email: String!
   is_pegawai: Boolean
+  user_id: Int!
   username: String
 }

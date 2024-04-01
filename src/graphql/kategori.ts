@@ -10,7 +10,21 @@ export const Kategori = objectType({
     t.nonNull.string("definisi");
   },
 });
+export const KategoriNested = objectType({
+  name: "kategoriNested",
+  definition(t) {
+    t.nonNull.id("kategori_id");
+    t.nonNull.string("nama");
+    t.nonNull.string("definisi");
+    t.nonNull.list.nullable.field({
+      type: "kategoriIndikator",
+      name: "KategoriIndikator",
+    });
+  },
+});
 
+
+const created_by = "admin"
 export const KategoriQuery = extendType({
   type: "Query",
   definition(t) {
@@ -32,6 +46,17 @@ export const KategoriQuery = extendType({
       type: "kategori",
       resolve(parent, args, context, info) {
         const kategori = context.prisma.kategori.findMany();
+        return kategori;
+      },
+    });
+    t.nonNull.list.nonNull.field("allKategoriNested", {
+      type: "kategoriNested",
+      resolve(parent, args, context, info) {
+        const kategori = context.prisma.kategori.findMany({
+          include: {
+            KategoriIndikator: true,
+          },
+        });
         return kategori;
       },
     });
@@ -58,6 +83,7 @@ export const KategoriMutation = extendType({
           data: {
             nama,
             definisi,
+			created_by,
           },
         });
         return newKategori;

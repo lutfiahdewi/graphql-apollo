@@ -8,6 +8,7 @@ interface inputIndikator {
   nama: String;
   is_benefit: number;
   definisi: String;
+  created_by?: String;
 }
 
 export const Indikator = objectType({
@@ -28,7 +29,7 @@ export const IndikatorNested = objectType({
     t.nonNull.string("nama");
     t.nonNull.int("is_benefit");
     t.nonNull.string("definisi");
-    t.nonNull.list.nonNull.field({
+    t.nonNull.list.nullable.field({
       type: "kategoriIndikator",
       name: "KategoriIndikator",
     });
@@ -56,6 +57,17 @@ export const IndikatorQuery = extendType({
       type: "indikator",
       resolve(_parent, _args, context, _info) {
         const indikator = context.prisma.indikator.findMany();
+        return indikator;
+      },
+    });
+    t.nonNull.list.nonNull.field("allIndikatorNested", {
+      type: "indikatorNested",
+      resolve(_parent, _args, context, _info) {
+        const indikator = context.prisma.indikator.findMany({
+          include: {
+            KategoriIndikator: true,
+          },
+      });
         return indikator;
       },
     });
@@ -95,7 +107,7 @@ export const IndikatorInputType = inputObjectType({
     t.nonNull.string("definisi");
   },
 });
-
+const created_by = "admin"
 export const IndikatorMutation = extendType({
   type: "Mutation",
   definition(t) {
@@ -110,6 +122,7 @@ export const IndikatorMutation = extendType({
             nama,
             definisi,
             is_benefit: parseInt(is_benefit),
+            created_by,
           },
         });
         return newIndikator;
@@ -251,6 +264,7 @@ export const IndikatorMutation = extendType({
   },
 });
 
+
 function creationNested(branch_kd : string, nama : string, definisi : string, is_benefit : string, kategori_id : string, bobot:number, no_urut:number, perbandingan:string) {
   return prisma.$transaction(
     async (tx) => {
@@ -261,6 +275,7 @@ function creationNested(branch_kd : string, nama : string, definisi : string, is
         nama,
         definisi,
         is_benefit: parseInt(is_benefit),
+        created_by,
       },
     });
     // 2. get indikator_id
@@ -282,7 +297,8 @@ function creationNested(branch_kd : string, nama : string, definisi : string, is
         },
         bobot,
         no_urut,
-        perbandingan
+        perbandingan,
+        created_by,
       },
     });
 

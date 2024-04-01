@@ -51,7 +51,7 @@ export const KategoriIndikatorInputType = inputObjectType({
     t.nullable.string("perbandingan");
   },
 });
-
+const created_by = "admin"
 export const KategoriIndikatorMutation = extendType({
   type: "Mutation",
   definition(t) {
@@ -75,7 +75,8 @@ export const KategoriIndikatorMutation = extendType({
             },
             bobot,
             no_urut,
-            perbandingan
+            perbandingan,
+            created_by,
           },
         });
         return newKategoriIndikator;
