@@ -86,7 +86,15 @@ export interface NexusGenObjects {
     nama: string; // String!
   }
   indikatorNested: { // root type
-    KategoriIndikator: NexusGenRootTypes['kategoriIndikator'][]; // [kategoriIndikator!]!
+    KategoriIndikator: Array<NexusGenRootTypes['kategoriIndikator'] | null>; // [kategoriIndikator]!
+    branch_kd: string; // String!
+    definisi: string; // String!
+    indikator_id: string; // ID!
+    is_benefit: number; // Int!
+    nama: string; // String!
+  }
+  indikatorNestedQuery: { // root type
+    KategoriIndikator: Array<NexusGenRootTypes['kategoriIndikatorNested'] | null>; // [kategoriIndikatorNested]!
     branch_kd: string; // String!
     definisi: string; // String!
     indikator_id: string; // ID!
@@ -107,10 +115,32 @@ export interface NexusGenObjects {
     no_urut: number; // Int!
     perbandingan?: string | null; // String
   }
+  kategoriIndikatorNested: { // root type
+    bobot?: number | null; // Float
+    branch_kd: string; // String!
+    indikator?: NexusGenRootTypes['indikator'] | null; // indikator
+    indikator_id: string; // ID!
+    kategori?: NexusGenRootTypes['kategori'] | null; // kategori
+    kategoriIndikator_id: string; // ID!
+    kategori_id: string; // ID!
+    no_urut: number; // Int!
+    perbandingan?: string | null; // String
+  }
+  kategoriNested: { // root type
+    definisi: string; // String!
+    kategori_id: string; // ID!
+    nama: string; // String!
+  }
   user: { // root type
     email: string; // String!
     is_pegawai?: boolean | null; // Boolean
-    user_id: number; // Int!
+    user_id: string; // ID!
+    username: string; // String!
+  }
+  userRole: { // root type
+    role_id: number; // Int!
+    status?: number | null; // Int
+    user_role_id: string; // ID!
     username?: string | null; // String
   }
 }
@@ -146,11 +176,13 @@ export interface NexusGenFieldTypes {
     updateKategoriIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
   }
   Query: { // field return type
+    Kategori: NexusGenRootTypes['kategoriNested']; // kategoriNested!
     allIndikator: NexusGenRootTypes['indikator'][]; // [indikator!]!
+    allIndikatorNested: NexusGenRootTypes['indikatorNestedQuery'][]; // [indikatorNestedQuery!]!
     allKategori: NexusGenRootTypes['kategori'][]; // [kategori!]!
     allKategoriIndikator: NexusGenRootTypes['kategoriIndikator'][]; // [kategoriIndikator!]!
+    allKategoriNested: NexusGenRootTypes['kategoriNested'][]; // [kategoriNested!]!
     indikator: NexusGenRootTypes['indikator']; // indikator!
-    kategori: NexusGenRootTypes['kategori']; // kategori!
     kategoriIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
     someIndikator: NexusGenRootTypes['indikator'][]; // [indikator!]!
   }
@@ -162,7 +194,15 @@ export interface NexusGenFieldTypes {
     nama: string; // String!
   }
   indikatorNested: { // field return type
-    KategoriIndikator: NexusGenRootTypes['kategoriIndikator'][]; // [kategoriIndikator!]!
+    KategoriIndikator: Array<NexusGenRootTypes['kategoriIndikator'] | null>; // [kategoriIndikator]!
+    branch_kd: string; // String!
+    definisi: string; // String!
+    indikator_id: string; // ID!
+    is_benefit: number; // Int!
+    nama: string; // String!
+  }
+  indikatorNestedQuery: { // field return type
+    KategoriIndikator: Array<NexusGenRootTypes['kategoriIndikatorNested'] | null>; // [kategoriIndikatorNested]!
     branch_kd: string; // String!
     definisi: string; // String!
     indikator_id: string; // ID!
@@ -183,10 +223,34 @@ export interface NexusGenFieldTypes {
     no_urut: number; // Int!
     perbandingan: string | null; // String
   }
+  kategoriIndikatorNested: { // field return type
+    bobot: number | null; // Float
+    branch_kd: string; // String!
+    indikator: NexusGenRootTypes['indikator'] | null; // indikator
+    indikator_id: string; // ID!
+    kategori: NexusGenRootTypes['kategori'] | null; // kategori
+    kategoriIndikator_id: string; // ID!
+    kategori_id: string; // ID!
+    no_urut: number; // Int!
+    perbandingan: string | null; // String
+  }
+  kategoriNested: { // field return type
+    KategoriIndikator: Array<NexusGenRootTypes['kategoriIndikatorNested'] | null>; // [kategoriIndikatorNested]!
+    definisi: string; // String!
+    kategori_id: string; // ID!
+    nama: string; // String!
+  }
   user: { // field return type
+    UserRole: Array<NexusGenRootTypes['userRole'] | null> | null; // [userRole]
     email: string; // String!
     is_pegawai: boolean | null; // Boolean
-    user_id: number; // Int!
+    user_id: string; // ID!
+    username: string; // String!
+  }
+  userRole: { // field return type
+    role_id: number; // Int!
+    status: number | null; // Int
+    user_role_id: string; // ID!
     username: string | null; // String
   }
 }
@@ -212,11 +276,13 @@ export interface NexusGenFieldTypeNames {
     updateKategoriIndikator: 'kategoriIndikator'
   }
   Query: { // field return type name
+    Kategori: 'kategoriNested'
     allIndikator: 'indikator'
+    allIndikatorNested: 'indikatorNestedQuery'
     allKategori: 'kategori'
     allKategoriIndikator: 'kategoriIndikator'
+    allKategoriNested: 'kategoriNested'
     indikator: 'indikator'
-    kategori: 'kategori'
     kategoriIndikator: 'kategoriIndikator'
     someIndikator: 'indikator'
   }
@@ -229,6 +295,14 @@ export interface NexusGenFieldTypeNames {
   }
   indikatorNested: { // field return type name
     KategoriIndikator: 'kategoriIndikator'
+    branch_kd: 'String'
+    definisi: 'String'
+    indikator_id: 'ID'
+    is_benefit: 'Int'
+    nama: 'String'
+  }
+  indikatorNestedQuery: { // field return type name
+    KategoriIndikator: 'kategoriIndikatorNested'
     branch_kd: 'String'
     definisi: 'String'
     indikator_id: 'ID'
@@ -249,10 +323,34 @@ export interface NexusGenFieldTypeNames {
     no_urut: 'Int'
     perbandingan: 'String'
   }
+  kategoriIndikatorNested: { // field return type name
+    bobot: 'Float'
+    branch_kd: 'String'
+    indikator: 'indikator'
+    indikator_id: 'ID'
+    kategori: 'kategori'
+    kategoriIndikator_id: 'ID'
+    kategori_id: 'ID'
+    no_urut: 'Int'
+    perbandingan: 'String'
+  }
+  kategoriNested: { // field return type name
+    KategoriIndikator: 'kategoriIndikatorNested'
+    definisi: 'String'
+    kategori_id: 'ID'
+    nama: 'String'
+  }
   user: { // field return type name
+    UserRole: 'userRole'
     email: 'String'
     is_pegawai: 'Boolean'
-    user_id: 'Int'
+    user_id: 'ID'
+    username: 'String'
+  }
+  userRole: { // field return type name
+    role_id: 'Int'
+    status: 'Int'
+    user_role_id: 'ID'
     username: 'String'
   }
 }
@@ -289,6 +387,7 @@ export interface NexusGenArgTypes {
     }
     signup: { // args
       email: string; // String!
+      is_pegawai?: number | null; // Int
       password: string; // String!
       username: string; // String!
     }
@@ -306,10 +405,10 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
-    indikator: { // args
+    Kategori: { // args
       id: number; // Int!
     }
-    kategori: { // args
+    indikator: { // args
       id: number; // Int!
     }
     kategoriIndikator: { // args

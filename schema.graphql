@@ -54,18 +54,20 @@ type Mutation {
   deleteKategori(id: Int!): kategori
   deleteKategoriIndikator(id: Int!): kategoriIndikator
   login(email: String!, password: String!): AuthPayload!
-  signup(email: String!, password: String!, username: String!): AuthPayload!
+  signup(email: String!, is_pegawai: Int, password: String!, username: String!): AuthPayload!
   updateIndikator(id: Int!, input: IndikatorInputType!): indikator!
   updateKategori(id: Int!, input: KategoriInputType!): kategori!
   updateKategoriIndikator(id: Int!, input: KategoriIndikatorInputType!): kategoriIndikator!
 }
 
 type Query {
+  Kategori(id: Int!): kategoriNested!
   allIndikator: [indikator!]!
+  allIndikatorNested: [indikatorNestedQuery!]!
   allKategori: [kategori!]!
   allKategoriIndikator: [kategoriIndikator!]!
+  allKategoriNested: [kategoriNested!]!
   indikator(id: Int!): indikator!
-  kategori(id: Int!): kategori!
   kategoriIndikator(id: Int!): kategoriIndikator!
   someIndikator(id: [Int!]!): [indikator!]!
 }
@@ -79,7 +81,16 @@ type indikator {
 }
 
 type indikatorNested {
-  KategoriIndikator: [kategoriIndikator!]!
+  KategoriIndikator: [kategoriIndikator]!
+  branch_kd: String!
+  definisi: String!
+  indikator_id: ID!
+  is_benefit: Int!
+  nama: String!
+}
+
+type indikatorNestedQuery {
+  KategoriIndikator: [kategoriIndikatorNested]!
   branch_kd: String!
   definisi: String!
   indikator_id: ID!
@@ -103,9 +114,36 @@ type kategoriIndikator {
   perbandingan: String
 }
 
+type kategoriIndikatorNested {
+  bobot: Float
+  branch_kd: String!
+  indikator: indikator
+  indikator_id: ID!
+  kategori: kategori
+  kategoriIndikator_id: ID!
+  kategori_id: ID!
+  no_urut: Int!
+  perbandingan: String
+}
+
+type kategoriNested {
+  KategoriIndikator: [kategoriIndikatorNested]!
+  definisi: String!
+  kategori_id: ID!
+  nama: String!
+}
+
 type user {
+  UserRole: [userRole]
   email: String!
   is_pegawai: Boolean
-  user_id: Int!
+  user_id: ID!
+  username: String!
+}
+
+type userRole {
+  role_id: Int!
+  status: Int
+  user_role_id: ID!
   username: String
 }

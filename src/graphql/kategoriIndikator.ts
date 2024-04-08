@@ -10,6 +10,22 @@ export const KategoriIndikator = objectType({
     t.nullable.float("bobot");
     t.nonNull.int("no_urut");
     t.nullable.string("perbandingan");
+    
+  },
+});
+
+export const KategoriIndikatorNested = objectType({
+  name: "kategoriIndikatorNested",
+  definition(t) {
+    t.nonNull.id("kategoriIndikator_id");
+    t.nonNull.string("branch_kd");
+    t.nonNull.id("indikator_id");
+    t.nonNull.id("kategori_id");
+    t.nullable.float("bobot");
+    t.nonNull.int("no_urut");
+    t.nullable.string("perbandingan");
+    t.nullable.field({name: "kategori", type:"kategori"});
+    t.nullable.field({name: "indikator", type:"indikator"});
   },
 });
 

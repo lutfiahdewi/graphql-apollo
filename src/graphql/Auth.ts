@@ -1,7 +1,7 @@
-import { objectType, extendType, stringArg, nonNull,  } from "nexus";
+import { objectType, extendType, stringArg, nonNull, nullable, intArg,  } from "nexus";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
-import { APP_SECRET } from "../utils/auth";
+// import { APP_SECRET } from "../utils/auth";
 
 
 export const AuthPayload = objectType({
@@ -42,7 +42,7 @@ export const AuthMutation = extendType({
                 }
 
                 // 3
-                const token = jwt.sign({ userId: user.id }, APP_SECRET);
+                const token = jwt.sign({ userId: user.user_id }, process.env.APP_SECRET||'');
 
                 // 4
                 return {
@@ -58,19 +58,21 @@ export const AuthMutation = extendType({
                 email: nonNull(stringArg()), 
                 password: nonNull(stringArg()),
                 username: nonNull(stringArg()),
+                is_pegawai: nullable(intArg()),
             },
             async resolve(parent, args, context) {
                 const { email, username } = args;
+                const is_pegawai = args.is_pegawai || 0
                 // 2
                 const password = await bcrypt.hash(args.password, 10);
 
                 // 3
                 const user = await context.prisma.user.create({
-                    data: { email, username, password },
+                    data: { email, username, password, is_pegawai, created_by:username },
                 });
 
                 // 4
-                const token = jwt.sign({ userId: user.id }, APP_SECRET);
+                const token = jwt.sign({ userId: user.user_id }, process.env.APP_SECRET||'');
 
                 // 5
                 return {

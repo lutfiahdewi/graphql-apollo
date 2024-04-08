@@ -1,6 +1,6 @@
 import { objectType, extendType, intArg, inputObjectType, nonNull } from "nexus";
 import { Prisma } from "@prisma/client";
-import { context } from "../context";
+import { context, prisma } from "../context";
 
 export const Kategori = objectType({
   name: "kategori",
@@ -16,48 +16,52 @@ export const KategoriNested = objectType({
     t.nonNull.id("kategori_id");
     t.nonNull.string("nama");
     t.nonNull.string("definisi");
-    t.nonNull.list.nullable.field({
-      type: "kategoriIndikator",
-      name: "KategoriIndikator",
+    t.nonNull.list.nullable.field("KategoriIndikator", {
+      type: "kategoriIndikatorNested",
+      resolve(parent, _args, context) {
+        const temp = context.prisma.kategoriIndikator.findMany({
+          where: { kategori_id: parent.kategori_id },
+          include: { indikator: true },
+        });
+        return temp;
+      },
     });
   },
 });
 
-
-const created_by = "admin"
+const created_by = "admin";
 export const KategoriQuery = extendType({
   type: "Query",
   definition(t) {
-    t.nonNull.field("kategori", {
-      type: "kategori",
+    t.nonNull.field("Kategori", {
+      type: "kategoriNested",
       args: {
         id: nonNull(intArg()),
       },
       resolve(parent, args, context, info) {
-        const kategori = context.prisma.kategori.findUnique({
+        return context.prisma.kategori.findUnique({
           where: {
             kategori_id: args.id,
           },
         });
-        return kategori;
       },
     });
     t.nonNull.list.nonNull.field("allKategori", {
       type: "kategori",
       resolve(parent, args, context, info) {
-        const kategori = context.prisma.kategori.findMany();
-        return kategori;
+        const { userId } = context;
+
+        if (!userId) {
+          // 1
+          throw new Error("Cannot post without logging in.");
+        }
+        return context.prisma.kategori.findMany();
       },
     });
     t.nonNull.list.nonNull.field("allKategoriNested", {
       type: "kategoriNested",
       resolve(parent, args, context, info) {
-        const kategori = context.prisma.kategori.findMany({
-          include: {
-            KategoriIndikator: true,
-          },
-        });
-        return kategori;
+        return context.prisma.kategori.findMany();
       },
     });
   },
@@ -83,7 +87,7 @@ export const KategoriMutation = extendType({
           data: {
             nama,
             definisi,
-			created_by,
+            created_by,
           },
         });
         return newKategori;
@@ -116,7 +120,7 @@ export const KategoriMutation = extendType({
           where: {
             kategori_id: args.id,
           },
-        });;
+        });
         return deletedKategori;
       },
     });
