@@ -5,6 +5,7 @@ import * as jwt from "jsonwebtoken";
 export interface AuthTokenPayload {
   // 1
   userId: number;
+  username: string;
 }
 
 export function decodeAuthHeader(authHeader: String): AuthTokenPayload {

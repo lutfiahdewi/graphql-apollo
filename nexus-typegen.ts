@@ -45,6 +45,15 @@ export interface NexusGenInputs {
     no_urut: number; // Int!
     perbandingan?: string | null; // String
   }
+  JumPosisiPetugasKegSurveiInputType: { // input type
+    branch_kd: string; // String!
+    is_confirmed?: boolean | null; // Boolean
+    jumlah: number; // Int!
+    kategori_id: string; // String!
+    keg_kd: string; // String!
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+  }
   KategoriIndikatorInputType: { // input type
     bobot?: number | null; // Float
     branch_kd: string; // String!
@@ -56,6 +65,97 @@ export interface NexusGenInputs {
   KategoriInputType: { // input type
     definisi: string; // String!
     nama: string; // String!
+  }
+  KegSurveiInputType: { // input type
+    is_add_indicator?: boolean | null; // Boolean
+    is_confirm?: boolean | null; // Boolean
+    is_multi?: number | null; // Int
+    is_rekrutmen?: number | null; // Int
+    keg_kd: string; // String!
+    status: number; // Int!
+    survei_kd: string; // String!
+    tgl_buka?: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_mulai?: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_rek_mulai?: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_rek_selesai?: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_selesai?: NexusGenScalars['DateTime'] | null; // DateTime
+  }
+  MitraTahunKerjaInputType: { // input type
+    branch_kd: string; // String!
+    status: number; // Int!
+    tahun: string; // String!
+    username: string; // String!
+  }
+  NilaiKategoriIndikatorInputType: { // input type
+    branch_kd: string; // String!
+    kategoriIndikator_id?: number | null; // Int
+    keg_kd: string; // String!
+    nilai?: number | null; // Int
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+    username: string; // String!
+  }
+  PenugasanStrukturInputType: { // input type
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    parent?: string | null; // String
+    posisi_kd: string; // String!
+    status?: number | null; // Int
+    username: string; // String!
+  }
+  PetugasKinerjaSurveiInputType: { // input type
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    nilai?: number | null; // Int
+    penilai: string; // String!
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+  }
+  PetugasSurveiInputType: { // input type
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    posisi_kd: string; // String!
+    status?: number | null; // Int
+    survei_kd: string; // String!
+    username: string; // String!
+  }
+  PosKegSurveiInputType: { // input type
+    is_multi?: number | null; // Int
+    is_view_mitra?: number | null; // Int
+    keg_kd: string; // String!
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+    urutan?: number | null; // Int
+  }
+  RankMitraInputType: { // input type
+    branch_kd: string; // String!
+    kategori_id: number; // Int!
+    nilai: number; // Float!
+    username: string; // String!
+  }
+  RankMitraPosKegSurveiInputType: { // input type
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    nilai?: number | null; // Float
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+    username: string; // String!
+  }
+  RankMitraTahunKerjaInputType: { // input type
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    nilai?: number | null; // Float
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+    tahun: string; // String!
+    username: string; // String!
+  }
+  SurveiInputType: { // input type
+    kode: string; // String!
+    nama: string; // String!
+    tahun: string; // String!
+    tipe: number; // Int!
+    unit_kd?: string | null; // String
   }
 }
 
@@ -101,6 +201,21 @@ export interface NexusGenObjects {
     is_benefit: number; // Int!
     nama: string; // String!
   }
+  jumPosisiPetugasKegSurvei: { // root type
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Posisi: NexusGenRootTypes['posisi']; // posisi!
+    Survei: NexusGenRootTypes['survei']; // survei!
+    branch_kd: string; // String!
+    is_confirmed?: boolean | null; // Boolean
+    jumlah: number; // Int!
+    jumposisipetugaskegsurvei_id: string; // ID!
+    kategori: NexusGenRootTypes['kategori']; // kategori!
+    kategori_id: string; // String!
+    keg_kd: string; // String!
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+    unit_kd?: string | null; // String
+  }
   kategori: { // root type
     definisi: string; // String!
     kategori_id: string; // ID!
@@ -126,10 +241,124 @@ export interface NexusGenObjects {
     no_urut: number; // Int!
     perbandingan?: string | null; // String
   }
-  kategoriNested: { // root type
-    definisi: string; // String!
-    kategori_id: string; // ID!
+  kegSurvei: { // root type
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Survei: NexusGenRootTypes['survei']; // survei!
+    is_add_indicator?: boolean | null; // Boolean
+    is_confirm?: boolean | null; // Boolean
+    is_multi?: number | null; // Int
+    is_rekrutmen?: number | null; // Int
+    keg_kd: string; // String!
+    kegsurvei_id: string; // ID!
+    status: number; // Int!
+    survei_kd: string; // String!
+    tgl_buka?: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_mulai?: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_rek_mulai?: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_rek_selesai?: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_selesai?: NexusGenScalars['DateTime'] | null; // DateTime
+  }
+  kegiatan: { // root type
+    deskripsi: string; // String!
+    kegiatan_id: string; // ID!
+    kode: string; // String!
     nama: string; // String!
+    status: number; // Int!
+  }
+  mitraTahunKerja: { // root type
+    branch_kd: string; // String!
+    mitratahunkerja_id: string; // ID!
+    status: number; // Int!
+    tahun: string; // String!
+    username: string; // String!
+  }
+  nilaiKategoriIndikator: { // root type
+    branch_kd: string; // String!
+    kategoriIndikator_id: number; // Int!
+    keg_kd: string; // String!
+    nilai?: number | null; // Int
+    nilaikategoriindikator_id: string; // ID!
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+    username: string; // String!
+  }
+  penugasanStruktur: { // root type
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    parent: string; // String!
+    penugasanstruktur_id: string; // ID!
+    posisi_kd: string; // String!
+    status: number; // Int!
+    username: string; // String!
+  }
+  petugasKinerjaSurvei: { // root type
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    nilai: number; // Int!
+    penilai: string; // String!
+    petugaskinerjasurvei_id: string; // ID!
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+  }
+  petugasSurvei: { // root type
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    petugassurvei_id: string; // ID!
+    posisi_kd: string; // String!
+    status?: number | null; // Int
+    survei_kd: string; // String!
+    username: string; // String!
+  }
+  posKegSurvei: { // root type
+    is_multi?: number | null; // Int
+    is_view_mitra?: number | null; // Int
+    keg_kd: string; // String!
+    posisi_kd: string; // String!
+    poskegsurvei_id: string; // ID!
+    survei_kd: string; // String!
+    urutan?: number | null; // Int
+  }
+  posisi: { // root type
+    deskripsi: string; // String!
+    kode: string; // String!
+    nama: string; // String!
+    posisi_id: string; // ID!
+    status: number; // Int!
+  }
+  rankMitra: { // root type
+    branch_kd: string; // String!
+    kategori: NexusGenRootTypes['kategori']; // kategori!
+    kategori_id: string; // String!
+    nilai: number; // Float!
+    rankmitra_id: string; // ID!
+    username: string; // String!
+  }
+  rankMitraPosKegSurvei: { // root type
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    nilai: number; // Float!
+    posisi_kd: string; // String!
+    rankmitraposkegsurvei_id: string; // ID!
+    survei_kd: string; // String!
+    username: string; // String!
+  }
+  rankMitraTahunKerja: { // root type
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    nilai: number; // Float!
+    posisi_kd: string; // String!
+    rankmitratahunkerja_id: string; // ID!
+    survei_kd: string; // String!
+    tahun: string; // String!
+    username: string; // String!
+  }
+  survei: { // root type
+    kode: string; // String!
+    nama: string; // String!
+    survei_id: string; // ID!
+    tahun: string; // String!
+    tipe: number; // Int!
+    unit_kd?: string | null; // String
   }
   user: { // root type
     email: string; // String!
@@ -163,9 +392,26 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createIndikator: NexusGenRootTypes['indikator']; // indikator!
     createIndikatorNested: NexusGenRootTypes['indikatorNested']; // indikatorNested!
+    createJumPosisiPetugasKegSurvei: NexusGenRootTypes['jumPosisiPetugasKegSurvei']; // jumPosisiPetugasKegSurvei!
     createKategori: NexusGenRootTypes['kategori']; // kategori!
     createKategoriIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
+    createKegSurvei: NexusGenRootTypes['kegSurvei']; // kegSurvei!
+    createKegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
     createManyIndikator: number; // Int!
+    createManyPenugasanStruktur: Array<NexusGenRootTypes['penugasanStruktur'] | null>; // [penugasanStruktur]!
+    createManyPetugasSurvei: Array<NexusGenRootTypes['petugasSurvei'] | null>; // [petugasSurvei]!
+    createMitraTahunKerja: NexusGenRootTypes['mitraTahunKerja']; // mitraTahunKerja!
+    createNilaiKategoriIndikator: NexusGenRootTypes['nilaiKategoriIndikator']; // nilaiKategoriIndikator!
+    createPenugasanStruktur: NexusGenRootTypes['penugasanStruktur']; // penugasanStruktur!
+    createPetugasKinerjaSurvei: NexusGenRootTypes['petugasKinerjaSurvei']; // petugasKinerjaSurvei!
+    createPetugasSurvei: NexusGenRootTypes['petugasSurvei']; // petugasSurvei!
+    createPosKegSurvei: NexusGenRootTypes['posKegSurvei']; // posKegSurvei!
+    createPosisi: NexusGenRootTypes['posisi']; // posisi!
+    createRankMitra: NexusGenRootTypes['rankMitra']; // rankMitra!
+    createRankMitraPosKegSurvei: NexusGenRootTypes['rankMitraPosKegSurvei']; // rankMitraPosKegSurvei!
+    createRankMitraTahunKerja: NexusGenRootTypes['rankMitraTahunKerja']; // rankMitraTahunKerja!
+    createSurvei: NexusGenRootTypes['survei']; // survei!
+    createUserRole: NexusGenRootTypes['userRole']; // userRole!
     deleteIndikator: NexusGenRootTypes['indikator'] | null; // indikator
     deleteKategori: NexusGenRootTypes['kategori'] | null; // kategori
     deleteKategoriIndikator: NexusGenRootTypes['kategoriIndikator'] | null; // kategoriIndikator
@@ -174,14 +420,30 @@ export interface NexusGenFieldTypes {
     updateIndikator: NexusGenRootTypes['indikator']; // indikator!
     updateKategori: NexusGenRootTypes['kategori']; // kategori!
     updateKategoriIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
+    updateRankMitra: NexusGenRootTypes['rankMitra']; // rankMitra!
+    updateRankMitraPosKegSurvei: NexusGenRootTypes['rankMitraPosKegSurvei']; // rankMitraPosKegSurvei!
+    updateRankMitraTahunKerja: NexusGenRootTypes['rankMitraTahunKerja']; // rankMitraTahunKerja!
   }
   Query: { // field return type
-    Kategori: NexusGenRootTypes['kategoriNested']; // kategoriNested!
+    JumPosisiPetugasKegSurvei: Array<NexusGenRootTypes['jumPosisiPetugasKegSurvei'] | null>; // [jumPosisiPetugasKegSurvei]!
+    Kategori: NexusGenRootTypes['kategori']; // kategori!
+    KegSurvei: Array<NexusGenRootTypes['kegSurvei'] | null>; // [kegSurvei]!
+    Kegiatan: Array<NexusGenRootTypes['kegiatan'] | null>; // [kegiatan]!
+    MitraTahunKerja: Array<NexusGenRootTypes['mitraTahunKerja'] | null>; // [mitraTahunKerja]!
+    NilaiKategoriIndikator: Array<NexusGenRootTypes['nilaiKategoriIndikator'] | null>; // [nilaiKategoriIndikator]!
+    PenugasanStruktur: Array<NexusGenRootTypes['penugasanStruktur'] | null>; // [penugasanStruktur]!
+    PetugasKinerjaSurvei: Array<NexusGenRootTypes['petugasKinerjaSurvei'] | null>; // [petugasKinerjaSurvei]!
+    PetugasSurvei: Array<NexusGenRootTypes['petugasSurvei'] | null>; // [petugasSurvei]!
+    PosKegSurvei: Array<NexusGenRootTypes['posKegSurvei'] | null>; // [posKegSurvei]!
+    Posisi: Array<NexusGenRootTypes['posisi'] | null>; // [posisi]!
+    RankMitra: Array<NexusGenRootTypes['rankMitra'] | null>; // [rankMitra]!
+    RankMitraPosKegSurvei: Array<NexusGenRootTypes['rankMitraPosKegSurvei'] | null>; // [rankMitraPosKegSurvei]!
+    RankMitraTahunKerja: Array<NexusGenRootTypes['rankMitraTahunKerja'] | null>; // [rankMitraTahunKerja]!
+    Survei: Array<NexusGenRootTypes['survei'] | null>; // [survei]!
     allIndikator: NexusGenRootTypes['indikator'][]; // [indikator!]!
     allIndikatorNested: NexusGenRootTypes['indikatorNestedQuery'][]; // [indikatorNestedQuery!]!
     allKategori: NexusGenRootTypes['kategori'][]; // [kategori!]!
     allKategoriIndikator: NexusGenRootTypes['kategoriIndikator'][]; // [kategoriIndikator!]!
-    allKategoriNested: NexusGenRootTypes['kategoriNested'][]; // [kategoriNested!]!
     indikator: NexusGenRootTypes['indikator']; // indikator!
     kategoriIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
     someIndikator: NexusGenRootTypes['indikator'][]; // [indikator!]!
@@ -209,7 +471,23 @@ export interface NexusGenFieldTypes {
     is_benefit: number; // Int!
     nama: string; // String!
   }
+  jumPosisiPetugasKegSurvei: { // field return type
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Posisi: NexusGenRootTypes['posisi']; // posisi!
+    Survei: NexusGenRootTypes['survei']; // survei!
+    branch_kd: string; // String!
+    is_confirmed: boolean | null; // Boolean
+    jumlah: number; // Int!
+    jumposisipetugaskegsurvei_id: string; // ID!
+    kategori: NexusGenRootTypes['kategori']; // kategori!
+    kategori_id: string; // String!
+    keg_kd: string; // String!
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+    unit_kd: string | null; // String
+  }
   kategori: { // field return type
+    KategoriIndikator: Array<NexusGenRootTypes['kategoriIndikatorNested'] | null> | null; // [kategoriIndikatorNested]
     definisi: string; // String!
     kategori_id: string; // ID!
     nama: string; // String!
@@ -234,11 +512,153 @@ export interface NexusGenFieldTypes {
     no_urut: number; // Int!
     perbandingan: string | null; // String
   }
-  kategoriNested: { // field return type
-    KategoriIndikator: Array<NexusGenRootTypes['kategoriIndikatorNested'] | null>; // [kategoriIndikatorNested]!
-    definisi: string; // String!
-    kategori_id: string; // ID!
+  kegSurvei: { // field return type
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Survei: NexusGenRootTypes['survei']; // survei!
+    is_add_indicator: boolean | null; // Boolean
+    is_confirm: boolean | null; // Boolean
+    is_multi: number | null; // Int
+    is_rekrutmen: number | null; // Int
+    keg_kd: string; // String!
+    kegsurvei_id: string; // ID!
+    status: number; // Int!
+    survei_kd: string; // String!
+    tgl_buka: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_mulai: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_rek_mulai: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_rek_selesai: NexusGenScalars['DateTime'] | null; // DateTime
+    tgl_selesai: NexusGenScalars['DateTime'] | null; // DateTime
+  }
+  kegiatan: { // field return type
+    deskripsi: string; // String!
+    kegiatan_id: string; // ID!
+    kode: string; // String!
     nama: string; // String!
+    status: number; // Int!
+  }
+  mitraTahunKerja: { // field return type
+    User: NexusGenRootTypes['user']; // user!
+    branch_kd: string; // String!
+    mitratahunkerja_id: string; // ID!
+    status: number; // Int!
+    tahun: string; // String!
+    username: string; // String!
+  }
+  nilaiKategoriIndikator: { // field return type
+    KategoriIndikator: Array<NexusGenRootTypes['kategoriIndikatorNested'] | null> | null; // [kategoriIndikatorNested]
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Posisi: NexusGenRootTypes['posisi']; // posisi!
+    Survei: NexusGenRootTypes['survei']; // survei!
+    User: NexusGenRootTypes['user']; // user!
+    branch_kd: string; // String!
+    kategoriIndikator_id: number; // Int!
+    keg_kd: string; // String!
+    nilai: number | null; // Int
+    nilaikategoriindikator_id: string; // ID!
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+    username: string; // String!
+  }
+  penugasanStruktur: { // field return type
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Posisi: NexusGenRootTypes['posisi']; // posisi!
+    User: NexusGenRootTypes['user']; // user!
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    parent: string; // String!
+    penugasanstruktur_id: string; // ID!
+    posisi_kd: string; // String!
+    status: number; // Int!
+    username: string; // String!
+  }
+  petugasKinerjaSurvei: { // field return type
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Posisi: NexusGenRootTypes['posisi']; // posisi!
+    Survei: NexusGenRootTypes['survei']; // survei!
+    User: NexusGenRootTypes['user']; // user!
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    nilai: number; // Int!
+    penilai: string; // String!
+    petugaskinerjasurvei_id: string; // ID!
+    posisi_kd: string; // String!
+    survei_kd: string; // String!
+  }
+  petugasSurvei: { // field return type
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Posisi: NexusGenRootTypes['posisi']; // posisi!
+    Survei: NexusGenRootTypes['survei']; // survei!
+    User: NexusGenRootTypes['user']; // user!
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    petugassurvei_id: string; // ID!
+    posisi_kd: string; // String!
+    status: number | null; // Int
+    survei_kd: string; // String!
+    username: string; // String!
+  }
+  posKegSurvei: { // field return type
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Posisi: NexusGenRootTypes['posisi']; // posisi!
+    Survei: NexusGenRootTypes['survei']; // survei!
+    is_multi: number | null; // Int
+    is_view_mitra: number | null; // Int
+    keg_kd: string; // String!
+    posisi_kd: string; // String!
+    poskegsurvei_id: string; // ID!
+    survei_kd: string; // String!
+    urutan: number | null; // Int
+  }
+  posisi: { // field return type
+    deskripsi: string; // String!
+    kode: string; // String!
+    nama: string; // String!
+    posisi_id: string; // ID!
+    status: number; // Int!
+  }
+  rankMitra: { // field return type
+    User: NexusGenRootTypes['user']; // user!
+    branch_kd: string; // String!
+    kategori: NexusGenRootTypes['kategori']; // kategori!
+    kategori_id: string; // String!
+    nilai: number; // Float!
+    rankmitra_id: string; // ID!
+    username: string; // String!
+  }
+  rankMitraPosKegSurvei: { // field return type
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Posisi: NexusGenRootTypes['posisi']; // posisi!
+    Survei: NexusGenRootTypes['survei']; // survei!
+    User: NexusGenRootTypes['user']; // user!
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    nilai: number; // Float!
+    posisi_kd: string; // String!
+    rankmitraposkegsurvei_id: string; // ID!
+    survei_kd: string; // String!
+    username: string; // String!
+  }
+  rankMitraTahunKerja: { // field return type
+    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
+    Posisi: NexusGenRootTypes['posisi']; // posisi!
+    Survei: NexusGenRootTypes['survei']; // survei!
+    User: NexusGenRootTypes['user']; // user!
+    branch_kd: string; // String!
+    keg_kd: string; // String!
+    nilai: number; // Float!
+    posisi_kd: string; // String!
+    rankmitratahunkerja_id: string; // ID!
+    survei_kd: string; // String!
+    tahun: string; // String!
+    username: string; // String!
+  }
+  survei: { // field return type
+    kode: string; // String!
+    nama: string; // String!
+    survei_id: string; // ID!
+    tahun: string; // String!
+    tipe: number; // Int!
+    unit_kd: string | null; // String
   }
   user: { // field return type
     UserRole: Array<NexusGenRootTypes['userRole'] | null> | null; // [userRole]
@@ -263,9 +683,26 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createIndikator: 'indikator'
     createIndikatorNested: 'indikatorNested'
+    createJumPosisiPetugasKegSurvei: 'jumPosisiPetugasKegSurvei'
     createKategori: 'kategori'
     createKategoriIndikator: 'kategoriIndikator'
+    createKegSurvei: 'kegSurvei'
+    createKegiatan: 'kegiatan'
     createManyIndikator: 'Int'
+    createManyPenugasanStruktur: 'penugasanStruktur'
+    createManyPetugasSurvei: 'petugasSurvei'
+    createMitraTahunKerja: 'mitraTahunKerja'
+    createNilaiKategoriIndikator: 'nilaiKategoriIndikator'
+    createPenugasanStruktur: 'penugasanStruktur'
+    createPetugasKinerjaSurvei: 'petugasKinerjaSurvei'
+    createPetugasSurvei: 'petugasSurvei'
+    createPosKegSurvei: 'posKegSurvei'
+    createPosisi: 'posisi'
+    createRankMitra: 'rankMitra'
+    createRankMitraPosKegSurvei: 'rankMitraPosKegSurvei'
+    createRankMitraTahunKerja: 'rankMitraTahunKerja'
+    createSurvei: 'survei'
+    createUserRole: 'userRole'
     deleteIndikator: 'indikator'
     deleteKategori: 'kategori'
     deleteKategoriIndikator: 'kategoriIndikator'
@@ -274,14 +711,30 @@ export interface NexusGenFieldTypeNames {
     updateIndikator: 'indikator'
     updateKategori: 'kategori'
     updateKategoriIndikator: 'kategoriIndikator'
+    updateRankMitra: 'rankMitra'
+    updateRankMitraPosKegSurvei: 'rankMitraPosKegSurvei'
+    updateRankMitraTahunKerja: 'rankMitraTahunKerja'
   }
   Query: { // field return type name
-    Kategori: 'kategoriNested'
+    JumPosisiPetugasKegSurvei: 'jumPosisiPetugasKegSurvei'
+    Kategori: 'kategori'
+    KegSurvei: 'kegSurvei'
+    Kegiatan: 'kegiatan'
+    MitraTahunKerja: 'mitraTahunKerja'
+    NilaiKategoriIndikator: 'nilaiKategoriIndikator'
+    PenugasanStruktur: 'penugasanStruktur'
+    PetugasKinerjaSurvei: 'petugasKinerjaSurvei'
+    PetugasSurvei: 'petugasSurvei'
+    PosKegSurvei: 'posKegSurvei'
+    Posisi: 'posisi'
+    RankMitra: 'rankMitra'
+    RankMitraPosKegSurvei: 'rankMitraPosKegSurvei'
+    RankMitraTahunKerja: 'rankMitraTahunKerja'
+    Survei: 'survei'
     allIndikator: 'indikator'
     allIndikatorNested: 'indikatorNestedQuery'
     allKategori: 'kategori'
     allKategoriIndikator: 'kategoriIndikator'
-    allKategoriNested: 'kategoriNested'
     indikator: 'indikator'
     kategoriIndikator: 'kategoriIndikator'
     someIndikator: 'indikator'
@@ -309,7 +762,23 @@ export interface NexusGenFieldTypeNames {
     is_benefit: 'Int'
     nama: 'String'
   }
+  jumPosisiPetugasKegSurvei: { // field return type name
+    Kegiatan: 'kegiatan'
+    Posisi: 'posisi'
+    Survei: 'survei'
+    branch_kd: 'String'
+    is_confirmed: 'Boolean'
+    jumlah: 'Int'
+    jumposisipetugaskegsurvei_id: 'ID'
+    kategori: 'kategori'
+    kategori_id: 'String'
+    keg_kd: 'String'
+    posisi_kd: 'String'
+    survei_kd: 'String'
+    unit_kd: 'String'
+  }
   kategori: { // field return type name
+    KategoriIndikator: 'kategoriIndikatorNested'
     definisi: 'String'
     kategori_id: 'ID'
     nama: 'String'
@@ -334,11 +803,153 @@ export interface NexusGenFieldTypeNames {
     no_urut: 'Int'
     perbandingan: 'String'
   }
-  kategoriNested: { // field return type name
-    KategoriIndikator: 'kategoriIndikatorNested'
-    definisi: 'String'
-    kategori_id: 'ID'
+  kegSurvei: { // field return type name
+    Kegiatan: 'kegiatan'
+    Survei: 'survei'
+    is_add_indicator: 'Boolean'
+    is_confirm: 'Boolean'
+    is_multi: 'Int'
+    is_rekrutmen: 'Int'
+    keg_kd: 'String'
+    kegsurvei_id: 'ID'
+    status: 'Int'
+    survei_kd: 'String'
+    tgl_buka: 'DateTime'
+    tgl_mulai: 'DateTime'
+    tgl_rek_mulai: 'DateTime'
+    tgl_rek_selesai: 'DateTime'
+    tgl_selesai: 'DateTime'
+  }
+  kegiatan: { // field return type name
+    deskripsi: 'String'
+    kegiatan_id: 'ID'
+    kode: 'String'
     nama: 'String'
+    status: 'Int'
+  }
+  mitraTahunKerja: { // field return type name
+    User: 'user'
+    branch_kd: 'String'
+    mitratahunkerja_id: 'ID'
+    status: 'Int'
+    tahun: 'String'
+    username: 'String'
+  }
+  nilaiKategoriIndikator: { // field return type name
+    KategoriIndikator: 'kategoriIndikatorNested'
+    Kegiatan: 'kegiatan'
+    Posisi: 'posisi'
+    Survei: 'survei'
+    User: 'user'
+    branch_kd: 'String'
+    kategoriIndikator_id: 'Int'
+    keg_kd: 'String'
+    nilai: 'Int'
+    nilaikategoriindikator_id: 'ID'
+    posisi_kd: 'String'
+    survei_kd: 'String'
+    username: 'String'
+  }
+  penugasanStruktur: { // field return type name
+    Kegiatan: 'kegiatan'
+    Posisi: 'posisi'
+    User: 'user'
+    branch_kd: 'String'
+    keg_kd: 'String'
+    parent: 'String'
+    penugasanstruktur_id: 'ID'
+    posisi_kd: 'String'
+    status: 'Int'
+    username: 'String'
+  }
+  petugasKinerjaSurvei: { // field return type name
+    Kegiatan: 'kegiatan'
+    Posisi: 'posisi'
+    Survei: 'survei'
+    User: 'user'
+    branch_kd: 'String'
+    keg_kd: 'String'
+    nilai: 'Int'
+    penilai: 'String'
+    petugaskinerjasurvei_id: 'ID'
+    posisi_kd: 'String'
+    survei_kd: 'String'
+  }
+  petugasSurvei: { // field return type name
+    Kegiatan: 'kegiatan'
+    Posisi: 'posisi'
+    Survei: 'survei'
+    User: 'user'
+    branch_kd: 'String'
+    keg_kd: 'String'
+    petugassurvei_id: 'ID'
+    posisi_kd: 'String'
+    status: 'Int'
+    survei_kd: 'String'
+    username: 'String'
+  }
+  posKegSurvei: { // field return type name
+    Kegiatan: 'kegiatan'
+    Posisi: 'posisi'
+    Survei: 'survei'
+    is_multi: 'Int'
+    is_view_mitra: 'Int'
+    keg_kd: 'String'
+    posisi_kd: 'String'
+    poskegsurvei_id: 'ID'
+    survei_kd: 'String'
+    urutan: 'Int'
+  }
+  posisi: { // field return type name
+    deskripsi: 'String'
+    kode: 'String'
+    nama: 'String'
+    posisi_id: 'ID'
+    status: 'Int'
+  }
+  rankMitra: { // field return type name
+    User: 'user'
+    branch_kd: 'String'
+    kategori: 'kategori'
+    kategori_id: 'String'
+    nilai: 'Float'
+    rankmitra_id: 'ID'
+    username: 'String'
+  }
+  rankMitraPosKegSurvei: { // field return type name
+    Kegiatan: 'kegiatan'
+    Posisi: 'posisi'
+    Survei: 'survei'
+    User: 'user'
+    branch_kd: 'String'
+    keg_kd: 'String'
+    nilai: 'Float'
+    posisi_kd: 'String'
+    rankmitraposkegsurvei_id: 'ID'
+    survei_kd: 'String'
+    username: 'String'
+  }
+  rankMitraTahunKerja: { // field return type name
+    Kegiatan: 'kegiatan'
+    Posisi: 'posisi'
+    Survei: 'survei'
+    User: 'user'
+    branch_kd: 'String'
+    keg_kd: 'String'
+    nilai: 'Float'
+    posisi_kd: 'String'
+    rankmitratahunkerja_id: 'ID'
+    survei_kd: 'String'
+    tahun: 'String'
+    username: 'String'
+  }
+  survei: { // field return type name
+    kode: 'String'
+    nama: 'String'
+    survei_id: 'ID'
+    tahun: 'String'
+    tipe: 'Int'
+    unit_kd: 'String'
   }
   user: { // field return type name
     UserRole: 'userRole'
@@ -363,14 +974,76 @@ export interface NexusGenArgTypes {
     createIndikatorNested: { // args
       input: NexusGenInputs['IndikatorNestedInputType']; // IndikatorNestedInputType!
     }
+    createJumPosisiPetugasKegSurvei: { // args
+      input: NexusGenInputs['JumPosisiPetugasKegSurveiInputType']; // JumPosisiPetugasKegSurveiInputType!
+    }
     createKategori: { // args
       input: NexusGenInputs['KategoriInputType']; // KategoriInputType!
     }
     createKategoriIndikator: { // args
       input: NexusGenInputs['KategoriIndikatorInputType']; // KategoriIndikatorInputType!
     }
+    createKegSurvei: { // args
+      input: NexusGenInputs['KegSurveiInputType']; // KegSurveiInputType!
+      survei?: NexusGenInputs['SurveiInputType'] | null; // SurveiInputType
+    }
+    createKegiatan: { // args
+      deskripsi: string; // String!
+      kode: string; // String!
+      nama: string; // String!
+      status: number; // Int!
+    }
     createManyIndikator: { // args
       input: NexusGenInputs['IndikatorInputType'][]; // [IndikatorInputType!]!
+    }
+    createManyPenugasanStruktur: { // args
+      input: NexusGenInputs['PenugasanStrukturInputType']; // PenugasanStrukturInputType!
+      usernames: Array<string | null>; // [String]!
+    }
+    createManyPetugasSurvei: { // args
+      input: NexusGenInputs['PetugasSurveiInputType']; // PetugasSurveiInputType!
+      usernames: Array<string | null>; // [String]!
+    }
+    createMitraTahunKerja: { // args
+      input: NexusGenInputs['MitraTahunKerjaInputType']; // MitraTahunKerjaInputType!
+    }
+    createNilaiKategoriIndikator: { // args
+      input: NexusGenInputs['NilaiKategoriIndikatorInputType']; // NilaiKategoriIndikatorInputType!
+    }
+    createPenugasanStruktur: { // args
+      input: NexusGenInputs['PenugasanStrukturInputType']; // PenugasanStrukturInputType!
+    }
+    createPetugasKinerjaSurvei: { // args
+      input: NexusGenInputs['PetugasKinerjaSurveiInputType']; // PetugasKinerjaSurveiInputType!
+    }
+    createPetugasSurvei: { // args
+      input: NexusGenInputs['PetugasSurveiInputType']; // PetugasSurveiInputType!
+    }
+    createPosKegSurvei: { // args
+      input: NexusGenInputs['PosKegSurveiInputType']; // PosKegSurveiInputType!
+    }
+    createPosisi: { // args
+      deskripsi: string; // String!
+      kode: string; // String!
+      nama: string; // String!
+      status: number; // Int!
+    }
+    createRankMitra: { // args
+      input: NexusGenInputs['RankMitraInputType']; // RankMitraInputType!
+    }
+    createRankMitraPosKegSurvei: { // args
+      input: NexusGenInputs['RankMitraPosKegSurveiInputType']; // RankMitraPosKegSurveiInputType!
+    }
+    createRankMitraTahunKerja: { // args
+      input: NexusGenInputs['RankMitraTahunKerjaInputType']; // RankMitraTahunKerjaInputType!
+    }
+    createSurvei: { // args
+      input: NexusGenInputs['SurveiInputType']; // SurveiInputType!
+    }
+    createUserRole: { // args
+      role_id: number; // Int!
+      status: number; // Int!
+      username: string; // String!
     }
     deleteIndikator: { // args
       id: number; // Int!
@@ -389,6 +1062,7 @@ export interface NexusGenArgTypes {
       email: string; // String!
       is_pegawai?: number | null; // Int
       password: string; // String!
+      role_id: number; // Int!
       username: string; // String!
     }
     updateIndikator: { // args
@@ -403,10 +1077,65 @@ export interface NexusGenArgTypes {
       id: number; // Int!
       input: NexusGenInputs['KategoriIndikatorInputType']; // KategoriIndikatorInputType!
     }
+    updateRankMitra: { // args
+      id: number; // Int!
+      input: NexusGenInputs['RankMitraInputType']; // RankMitraInputType!
+    }
+    updateRankMitraPosKegSurvei: { // args
+      id: number; // Int!
+      input: NexusGenInputs['RankMitraPosKegSurveiInputType']; // RankMitraPosKegSurveiInputType!
+    }
+    updateRankMitraTahunKerja: { // args
+      id: number; // Int!
+      input: NexusGenInputs['RankMitraTahunKerjaInputType']; // RankMitraTahunKerjaInputType!
+    }
   }
   Query: {
+    JumPosisiPetugasKegSurvei: { // args
+      id?: number | null; // Int
+    }
     Kategori: { // args
       id: number; // Int!
+    }
+    KegSurvei: { // args
+      id?: number | null; // Int
+    }
+    Kegiatan: { // args
+      kode?: string | null; // String
+    }
+    MitraTahunKerja: { // args
+      id?: number | null; // Int
+    }
+    NilaiKategoriIndikator: { // args
+      id?: number | null; // Int
+    }
+    PenugasanStruktur: { // args
+      id?: number | null; // Int
+    }
+    PetugasKinerjaSurvei: { // args
+      id?: number | null; // Int
+    }
+    PetugasSurvei: { // args
+      id?: number | null; // Int
+      username?: string | null; // String
+    }
+    PosKegSurvei: { // args
+      id?: number | null; // Int
+    }
+    Posisi: { // args
+      kode?: string | null; // String
+    }
+    RankMitra: { // args
+      id?: number | null; // Int
+    }
+    RankMitraPosKegSurvei: { // args
+      id?: number | null; // Int
+    }
+    RankMitraTahunKerja: { // args
+      id?: number | null; // Int
+    }
+    Survei: { // args
+      kode?: string | null; // String
     }
     indikator: { // args
       id: number; // Int!

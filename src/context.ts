@@ -8,6 +8,7 @@ export const prisma = new PrismaClient({log: ['query', 'info', 'warn', 'error']}
 export interface Context extends BaseContext {
   prisma: PrismaClient;
   userId?: number;
+  username?: string;
 }
 
 // Context for v3
@@ -24,6 +25,7 @@ export const createContext = async ({ req }: { req: Request }): Promise<Context>
   const token = req && req.headers.authorization ? decodeAuthHeader(req.headers.authorization) : null;
   return {
     prisma: new PrismaClient({log: ['query', 'info', 'warn', 'error']}),
+    username: token?.username,
     userId: token?.userId,
   };
 };

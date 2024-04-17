@@ -127,7 +127,7 @@ export const IndikatorInputType = inputObjectType({
     t.nonNull.string("definisi");
   },
 });
-const created_by = "admin";
+
 export const IndikatorMutation = extendType({
   type: "Mutation",
   definition(t) {
@@ -135,6 +135,10 @@ export const IndikatorMutation = extendType({
       type: "indikator",
       args: { input: nonNull(IndikatorInputType) },
       resolve(_parent, args, context, _info) {
+        const { username } = context;
+        if (!username) {
+          throw new Error("Cannot post without logging in.");
+        }
         const { branch_kd, nama, definisi, is_benefit } = args.input;
         const newIndikator = context.prisma.indikator.create({
           data: {
@@ -142,7 +146,7 @@ export const IndikatorMutation = extendType({
             nama,
             definisi,
             is_benefit: parseInt(is_benefit),
-            created_by,
+            created_by: username,
           },
         });
         return newIndikator;
@@ -191,33 +195,12 @@ export const IndikatorMutation = extendType({
       type: "indikatorNested",
       args: { input: nonNull(IndikatorNestedInputType) },
       resolve(_parent, args, context, _info) {
+        const { username } = context;
+        if (!username) {
+          throw new Error("Cannot post without logging in.");
+        }
         const { branch_kd, nama, definisi, is_benefit, kategori_id, bobot, no_urut, perbandingan } = args.input;
-        /*const newIndikator = context.prisma.indikator.create({
-          data: {
-            branch_kd,
-            nama,
-            definisi,
-            is_benefit: parseInt(is_benefit),
-            KategoriIndikator: {
-              create: [{
-                branch_kd,
-                kategori: {
-                  connect: {
-                    kategori_id: parseInt(kategori_id),
-                  }
-                },
-                bobot,
-                no_urut,
-                perbandingan,
-              }],
-            },
-          },
-          include: {
-            KategoriIndikator: true,
-          },
-        });
-        return newIndikator;*/
-        return creationNested(branch_kd, nama, definisi, is_benefit, kategori_id, bobot, no_urut, perbandingan);
+        return creationNested(branch_kd, nama, definisi, is_benefit, kategori_id, bobot, no_urut, perbandingan, username);
       },
     });
 
@@ -284,7 +267,7 @@ export const IndikatorMutation = extendType({
   },
 });
 
-function creationNested(branch_kd: string, nama: string, definisi: string, is_benefit: string, kategori_id: string, bobot: number, no_urut: number, perbandingan: string) {
+function creationNested(branch_kd: string, nama: string, definisi: string, is_benefit: string, kategori_id: string, bobot: number, no_urut: number, perbandingan: string, created_by: string) {
   return prisma.$transaction(
     async (tx) => {
       // 1. createIndikator
@@ -334,13 +317,13 @@ function creationNested(branch_kd: string, nama: string, definisi: string, is_be
     },
     {
       isolationLevel: Prisma.TransactionIsolationLevel.ReadUncommitted,
-	  //Penerapan ReadUncommitted merupakan level terendah dari TransactionIsolationLevel yang mana membuat data
-	  //yang belum terkirim akan dikirim ulang dalam satu transaksi sehingga menyebabkan adanya duplikat data pada database.
-	  // ReadUncommitted digunakan ketika 
-	  //disisi lain, aturan Serializable merupakan yg paling ketat. Namun pada iterasi hny data terakhir yg terkirim (termasuk aturan isolationLevel lainnya).
-	  //isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
       maxWait: 30000, // default: 2000
       timeout: 30000, // default: 5000
     }
   );
+  //Penerapan ReadUncommitted merupakan level terendah dari TransactionIsolationLevel yang mana membuat data
+  //yang belum terkirim akan dikirim ulang dalam satu transaksi sehingga menyebabkan adanya duplikat data pada database.
+  // ReadUncommitted digunakan ketika 
+  //disisi lain, aturan Serializable merupakan yg paling ketat. Namun pada iterasi hny data terakhir yg terkirim (termasuk aturan isolationLevel lainnya).
+  //isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
 }

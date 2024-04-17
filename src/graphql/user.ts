@@ -11,7 +11,7 @@ export const User = objectType({
     t.nullable.list.nullable.field("UserRole", {
       type: "userRole",
       resolve(parent, args, context) {
-        return context.prisma.userRole.findUnique({
+        return context.prisma.userRole.findMany({
           where: {
             username: parent.username,
           },

@@ -2,21 +2,14 @@ import { objectType, extendType, intArg, inputObjectType, nonNull } from "nexus"
 import { Prisma } from "@prisma/client";
 import { context, prisma } from "../context";
 
+
 export const Kategori = objectType({
   name: "kategori",
   definition(t) {
     t.nonNull.id("kategori_id");
     t.nonNull.string("nama");
     t.nonNull.string("definisi");
-  },
-});
-export const KategoriNested = objectType({
-  name: "kategoriNested",
-  definition(t) {
-    t.nonNull.id("kategori_id");
-    t.nonNull.string("nama");
-    t.nonNull.string("definisi");
-    t.nonNull.list.nullable.field("KategoriIndikator", {
+    t.nullable.list.nullable.field("KategoriIndikator", {
       type: "kategoriIndikatorNested",
       resolve(parent, _args, context) {
         const temp = context.prisma.kategoriIndikator.findMany({
@@ -29,12 +22,12 @@ export const KategoriNested = objectType({
   },
 });
 
-const created_by = "admin";
+
 export const KategoriQuery = extendType({
   type: "Query",
   definition(t) {
     t.nonNull.field("Kategori", {
-      type: "kategoriNested",
+      type: "kategori",
       args: {
         id: nonNull(intArg()),
       },
@@ -50,17 +43,10 @@ export const KategoriQuery = extendType({
       type: "kategori",
       resolve(parent, args, context, info) {
         const { userId } = context;
-
         if (!userId) {
           // 1
           throw new Error("Cannot post without logging in.");
         }
-        return context.prisma.kategori.findMany();
-      },
-    });
-    t.nonNull.list.nonNull.field("allKategoriNested", {
-      type: "kategoriNested",
-      resolve(parent, args, context, info) {
         return context.prisma.kategori.findMany();
       },
     });
@@ -82,12 +68,16 @@ export const KategoriMutation = extendType({
       type: "kategori",
       args: { input: nonNull(KategoriInputType) },
       resolve(parent, args, context, info) {
+        const { username } = context;
+        if (!username) {
+          throw new Error("Cannot post without logging in.");
+        }
         const { nama, definisi } = args.input;
         const newKategori = context.prisma.kategori.create({
           data: {
             nama,
             definisi,
-            created_by,
+            created_by: username,
           },
         });
         return newKategori;

@@ -67,7 +67,7 @@ export const KategoriIndikatorInputType = inputObjectType({
     t.nullable.string("perbandingan");
   },
 });
-const created_by = "admin"
+
 export const KategoriIndikatorMutation = extendType({
   type: "Mutation",
   definition(t) {
@@ -75,6 +75,10 @@ export const KategoriIndikatorMutation = extendType({
       type: "kategoriIndikator",
       args: { input: nonNull(KategoriIndikatorInputType) },
       resolve(parent, args, context, info) {
+        const { username } = context;
+        if (!username) {
+          throw new Error("Cannot post without logging in.");
+        }
         const { branch_kd, indikator_id, kategori_id, bobot, no_urut, perbandingan} = args.input;
         const newKategoriIndikator = context.prisma.kategoriIndikator.create({
           data: {
@@ -92,7 +96,7 @@ export const KategoriIndikatorMutation = extendType({
             bobot,
             no_urut,
             perbandingan,
-            created_by,
+            created_by:username,
           },
         });
         return newKategoriIndikator;
