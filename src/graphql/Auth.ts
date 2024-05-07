@@ -55,11 +55,13 @@ export const AuthMutation = extendType({
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
         username: nonNull(stringArg()),
+        nama: nonNull(stringArg()),
         is_pegawai: nullable(intArg()),
         role_id: nonNull(intArg()),
+        tahun: nonNull(stringArg()),
       },
       async resolve(parent, args, context) {
-        const { email, username, role_id } = args;
+        const { email, username, nama, role_id, tahun} = args;
         const is_pegawai = args.is_pegawai || 0;
         // 2
         const password = await bcrypt.hash(args.password, 10);
@@ -71,6 +73,7 @@ export const AuthMutation = extendType({
             username,
             password,
             is_pegawai,
+            nama,
             created_by: username,
           },
         });
@@ -84,12 +87,24 @@ export const AuthMutation = extendType({
             created_by: username,
           },
         });
+        const mitraTahunKerja = await context.prisma.mitraTahunKerja.create({
+          data: {
+            branch_kd:"0123ABC",
+            User: {
+              connect: { username },
+            },
+            tahun,
+            status:1,
+            created_by: username,
+          },
+        });
         const userNested = await context.prisma.user.findUnique({
           where: {
             username: userRole.username,
           },
           include: {
             UserRole: true,
+            MitraTahunKerja: true,
           },
         });
 

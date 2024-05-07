@@ -1,21 +1,8 @@
 import { objectType, extendType, nonNull, intArg, inputObjectType } from "nexus";
 
+
 export const KategoriIndikator = objectType({
   name: "kategoriIndikator",
-  definition(t) {
-    t.nonNull.id("kategoriIndikator_id");
-    t.nonNull.string("branch_kd");
-    t.nonNull.id("indikator_id");
-    t.nonNull.id("kategori_id");
-    t.nullable.float("bobot");
-    t.nonNull.int("no_urut");
-    t.nullable.string("perbandingan");
-    
-  },
-});
-
-export const KategoriIndikatorNested = objectType({
-  name: "kategoriIndikatorNested",
   definition(t) {
     t.nonNull.id("kategoriIndikator_id");
     t.nonNull.string("branch_kd");

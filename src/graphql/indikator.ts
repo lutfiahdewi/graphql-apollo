@@ -1,15 +1,8 @@
-import { objectType, extendType, intArg, nonNull, inputObjectType, list } from "nexus";
+import { objectType, extendType, intArg, nonNull, inputObjectType, list, nullable } from "nexus";
 import { KategoriIndikator } from "./kategoriIndikator";
 import { Prisma } from "@prisma/client";
 import { context, createContext, prisma } from "../context";
 
-interface inputIndikator {
-  branch_kd: String;
-  nama: String;
-  is_benefit: number;
-  definisi: String;
-  created_by?: String;
-}
 
 export const Indikator = objectType({
   name: "indikator",
@@ -46,7 +39,7 @@ export const IndikatorNestedQuery = objectType({
     t.nonNull.int("is_benefit");
     t.nonNull.string("definisi");
     t.nonNull.list.nullable.field({
-      type: "kategoriIndikatorNested",
+      type: "kategoriIndikator",
       name: "KategoriIndikator",
     });
   },
@@ -55,25 +48,23 @@ export const IndikatorNestedQuery = objectType({
 export const IndikatorQuery = extendType({
   type: "Query",
   definition(t) {
-    t.nonNull.field("indikator", {
+    t.nonNull.list.nonNull.field("indikator", {
       type: "indikator",
       args: {
-        id: nonNull(intArg()),
+        id: nullable(intArg()),
       },
       resolve(_parent, args, context, _info) {
-        const indikator = context.prisma.indikator.findUnique({
-          where: {
-            indikator_id: args.id,
-          },
-        });
+        if(args.id){
+          const indikator = context.prisma.indikator.findUnique({
+            where: {
+              indikator_id: args.id,
+            },
+          });
+          return [indikator];
+        }else{
+          const indikator = context.prisma.indikator.findMany();
         return indikator;
-      },
-    });
-    t.nonNull.list.nonNull.field("allIndikator", {
-      type: "indikator",
-      resolve(_parent, _args, context, _info) {
-        const indikator = context.prisma.indikator.findMany();
-        return indikator;
+        }
       },
     });
     t.nonNull.list.nonNull.field("allIndikatorNested", {
@@ -201,28 +192,6 @@ export const IndikatorMutation = extendType({
         }
         const { branch_kd, nama, definisi, is_benefit, kategori_id, bobot, no_urut, perbandingan } = args.input;
         return creationNested(branch_kd, nama, definisi, is_benefit, kategori_id, bobot, no_urut, perbandingan, username);
-      },
-    });
-
-    t.nonNull.field("createManyIndikator", {
-      type: "Int",
-      args: { input: nonNull(list(nonNull(IndikatorInputType))) },
-      resolve(_parent, args, context, _info) {
-        const { list } = args.input;
-        let listInput: inputIndikator[] = [];
-        for (let i = 0; i < list.length; i++) {
-          listInput[i] = {
-            branch_kd: list[i].branch_kd,
-            nama: list[i].nama,
-            definisi: list[i].definisi,
-            is_benefit: parseInt(list[i].is_benefit),
-          };
-        }
-        // const { branch_kd, nama, definisi, is_benefit } = args.input;
-        const { count } = context.prisma.indikator.createMany({
-          data: listInput,
-        });
-        return count;
       },
     });
 

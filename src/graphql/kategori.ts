@@ -10,7 +10,7 @@ export const Kategori = objectType({
     t.nonNull.string("nama");
     t.nonNull.string("definisi");
     t.nullable.list.nullable.field("KategoriIndikator", {
-      type: "kategoriIndikatorNested",
+      type: "kategoriIndikator",
       resolve(parent, _args, context) {
         const temp = context.prisma.kategoriIndikator.findMany({
           where: { kategori_id: parent.kategori_id },

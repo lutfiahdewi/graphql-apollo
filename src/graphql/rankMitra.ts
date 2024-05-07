@@ -2,7 +2,7 @@ import { objectType, extendType, intArg, nonNull, nullable, list, stringArg, inp
 import { prisma } from "../context";
 // import moment from 'moment';
 
-const moment = require('moment');
+const moment = require("moment");
 export const RankMitra = objectType({
   name: "rankMitra",
   definition(t) {
@@ -30,8 +30,12 @@ export const RankMitraQuery = extendType({
       type: "rankMitra",
       args: {
         id: nullable(intArg()),
+        branch_kd: nullable(stringArg()),
+        username: nullable(stringArg()),
+        kategori_id: nullable(stringArg()),
       },
       resolve(parent, args, context) {
+        const { id, branch_kd, username, kategori_id } = args;
         if (args.id) {
           return [
             context.prisma.rankMitra.findUnique({
@@ -43,6 +47,14 @@ export const RankMitraQuery = extendType({
               },
             }),
           ];
+        } else if (branch_kd || username || kategori_id) {
+          return context.prisma.rankMitra.findMany({
+            where:{
+              branch_kd,
+              username,
+              kategori_id
+            }
+          })
         } else {
           return context.prisma.rankMitra.findMany({
             include: {
@@ -103,16 +115,16 @@ export const RankMitraMutation = extendType({
         if (!userName) {
           throw new Error("Cannot post without logging in.");
         }
-        let nowMoment = moment.utc(); 
-        nowMoment.local()
-        const updated_at = nowMoment.toISOString(true); 
+        let nowMoment = moment.utc();
+        nowMoment.local();
+        const updated_at = nowMoment.toISOString(true);
         console.log(updated_at);
-        const rankmitra_id = args.id
+        const rankmitra_id = args.id;
         const { branch_kd, username, kategori_id, nilai } = args.input;
         return context.prisma.rankMitra.update({
-            where:{
-                rankmitra_id
-            },
+          where: {
+            rankmitra_id,
+          },
           data: {
             branch_kd,
             User: {

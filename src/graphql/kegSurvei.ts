@@ -30,27 +30,42 @@ export const KegSurveiQuery = extendType({
       type: "kegSurvei",
       args: {
         id: nullable(intArg()),
+        survei_kd: nullable(stringArg()),
+        keg_kd: nullable(stringArg()),
       },
       resolve(parent, args, context) {
-        if (args.id) {
+        const {id, survei_kd, keg_kd} = args;
+        if (id) {
           return [
             context.prisma.kegSurvei.findUnique({
               where: {
-                kegsurvei_id: args.id,
+                kegsurvei_id: id,
               },
-		include: {
-            Survei: true,
-            Kegiatan: true,
-          },
+              include: {
+                Survei: true,
+                Kegiatan: true,
+              },
             }),
           ];
-        } else {
+        }else if(survei_kd || keg_kd){
           return context.prisma.kegSurvei.findMany({
-include: {
-            Survei: true,
-            Kegiatan: true,
-          },
-});
+            where: {
+              survei_kd,
+              keg_kd,
+            },
+            include: {
+              Survei: true,
+              Kegiatan: true,
+            },
+          });
+        } 
+        else {
+          return context.prisma.kegSurvei.findMany({
+            include: {
+              Survei: true,
+              Kegiatan: true,
+            },
+          });
         }
       },
     });

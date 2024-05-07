@@ -5,6 +5,7 @@ export const User = objectType({
   definition(t) {
     t.nonNull.id("user_id");
     t.nonNull.string("username");
+    t.nullable.string("nama");
     t.nonNull.string("email");
     // t.nonNull.string("password");
     t.nullable.boolean("is_pegawai");
@@ -12,6 +13,16 @@ export const User = objectType({
       type: "userRole",
       resolve(parent, args, context) {
         return context.prisma.userRole.findMany({
+          where: {
+            username: parent.username,
+          },
+        });
+      },
+    });
+    t.nullable.list.nullable.field("MitraTahunKerja", {
+      type: "mitraTahunKerja",
+      resolve(parent, args, context) {
+        return context.prisma.mitraTahunKerja.findMany({
           where: {
             username: parent.username,
           },

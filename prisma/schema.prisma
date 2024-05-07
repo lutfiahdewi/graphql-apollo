@@ -27,15 +27,15 @@ model User {
   created_at             DateTime                 @default(now()) @db.DateTime
   updated_by             String?                  @db.VarChar(20)
   updated_at             DateTime?                @db.DateTime
-  PetugasSurvei          PetugasSurvei[]
-  UserRole               UserRole[]
-  PetugasKinerjaSurvei   PetugasKinerjaSurvei[]
-  PenugasanStruktur      PenugasanStruktur[]
-  NilaiKategoriIndikator NilaiKategoriIndikator[]
-  RankMitraTahunKerja    RankMitraTahunKerja[]
-  RankMitraPosKegSurvei  RankMitraPosKegSurvei[]
-  RankMitra              RankMitra[]
   MitraTahunKerja        MitraTahunKerja[]
+  NilaiKategoriIndikator NilaiKategoriIndikator[]
+  PenugasanStruktur      PenugasanStruktur[]
+  PetugasKinerjaSurvei   PetugasKinerjaSurvei[]
+  PetugasSurvei          PetugasSurvei[]
+  RankMitra              RankMitra[]
+  RankMitraPosKegSurvei  RankMitraPosKegSurvei[]
+  RankMitraTahunKerja    RankMitraTahunKerja[]
+  UserRole               UserRole[]
 }
 
 model UserRole {
@@ -55,7 +55,7 @@ model Indikator {
   branch_kd         String              @db.VarChar(20)
   nama              String              @db.VarChar(20)
   is_benefit        Int                 @db.TinyInt
-  definisi          String              @db.VarChar(255)
+  definisi          String?             @db.VarChar(2500)
   created_by        String              @db.VarChar(20)
   created_at        DateTime            @default(now()) @db.DateTime
   updated_by        String?             @db.VarChar(20)
@@ -66,7 +66,7 @@ model Indikator {
 model Kategori {
   kategori_id               Int                         @id @default(autoincrement())
   nama                      String                      @db.VarChar(20)
-  definisi                  String                      @db.VarChar(255)
+  definisi                  String?                     @db.VarChar(2500)
   created_by                String                      @db.VarChar(20)
   created_at                DateTime                    @default(now()) @db.DateTime
   updated_by                String?                     @db.VarChar(20)
@@ -81,7 +81,7 @@ model KategoriIndikator {
   branch_kd              String                   @db.VarChar(20)
   kategori_id            Int
   indikator_id           Int
-  bobot                  Decimal?                 @db.Decimal(3, 3)
+  bobot                  Decimal?                 @db.Decimal(4, 3)
   no_urut                Int                      @db.TinyInt
   perbandingan           String                   @db.VarChar(100)
   created_by             String                   @db.VarChar(20)
@@ -106,12 +106,12 @@ model Survei {
   updated_at                DateTime?                   @db.DateTime
   JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei[]
   KegSurvei                 KegSurvei[]
+  NilaiKategoriIndikator    NilaiKategoriIndikator[]
+  PetugasKinerjaSurvei      PetugasKinerjaSurvei[]
   PetugasSurvei             PetugasSurvei[]
   PosKegSurvei              PosKegSurvei[]
-  PetugasKinerjaSurvei      PetugasKinerjaSurvei[]
-  NilaiKategoriIndikator    NilaiKategoriIndikator[]
-  RankMitraTahunKerja       RankMitraTahunKerja[]
   RankMitraPosKegSurvei     RankMitraPosKegSurvei[]
+  RankMitraTahunKerja       RankMitraTahunKerja[]
 }
 
 model Kegiatan {
@@ -126,13 +126,13 @@ model Kegiatan {
   updated_at                DateTime?                   @db.DateTime
   JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei[]
   KegSurvei                 KegSurvei[]
+  NilaiKategoriIndikator    NilaiKategoriIndikator[]
+  PenugasanStruktur         PenugasanStruktur[]
+  PetugasKinerjaSurvei      PetugasKinerjaSurvei[]
   PetugasSurvei             PetugasSurvei[]
   PosKegSurvei              PosKegSurvei[]
-  PetugasKinerjaSurvei      PetugasKinerjaSurvei[]
-  PenugasanStruktur         PenugasanStruktur[]
-  NilaiKategoriIndikator    NilaiKategoriIndikator[]
-  RankMitraTahunKerja       RankMitraTahunKerja[]
   RankMitraPosKegSurvei     RankMitraPosKegSurvei[]
+  RankMitraTahunKerja       RankMitraTahunKerja[]
 }
 
 model KegSurvei {
@@ -168,13 +168,13 @@ model Posisi {
   updated_by                String?                     @db.VarChar(20)
   updated_at                DateTime?                   @db.DateTime
   JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei[]
+  NilaiKategoriIndikator    NilaiKategoriIndikator[]
+  PenugasanStruktur         PenugasanStruktur[]
+  PetugasKinerjaSurvei      PetugasKinerjaSurvei[]
   PetugasSurvei             PetugasSurvei[]
   PosKegSurvei              PosKegSurvei[]
-  PetugasKinerjaSurvei      PetugasKinerjaSurvei[]
-  PenugasanStruktur         PenugasanStruktur[]
-  NilaiKategoriIndikator    NilaiKategoriIndikator[]
-  RankMitraTahunKerja       RankMitraTahunKerja[]
   RankMitraPosKegSurvei     RankMitraPosKegSurvei[]
+  RankMitraTahunKerja       RankMitraTahunKerja[]
 }
 
 model PosKegSurvei {
@@ -200,7 +200,6 @@ model JumPosisiPetugasKegSurvei {
   keg_kd                       String    @db.VarChar(10)
   unit_kd                      String?   @db.VarChar(20)
   branch_kd                    String    @db.VarChar(20)
-  posisi_kd                    String    @db.VarChar(10)
   kategori_id                  Int
   jumlah                       Int       @db.SmallInt
   created_by                   String    @db.VarChar(20)
@@ -208,9 +207,10 @@ model JumPosisiPetugasKegSurvei {
   updated_by                   String?   @db.VarChar(20)
   updated_at                   DateTime? @db.DateTime
   is_confirmed                 Boolean?
+  posisi_kd                    String    @db.VarChar(10)
   kategori                     Kategori  @relation(fields: [kategori_id], references: [kategori_id])
-  Posisi                       Posisi    @relation(fields: [posisi_kd], references: [kode])
   Kegiatan                     Kegiatan  @relation(fields: [keg_kd], references: [kode])
+  Posisi                       Posisi    @relation(fields: [posisi_kd], references: [kode])
   Survei                       Survei    @relation(fields: [survei_kd], references: [kode])
 }
 
@@ -232,7 +232,6 @@ model PetugasSurvei {
   User             User      @relation(fields: [username], references: [username])
 }
 
-// Penilaian
 model PetugasKinerjaSurvei {
   petugaskinerjasurvei_id Int       @id @default(autoincrement())
   survei_kd               String    @db.VarChar(20)
@@ -246,9 +245,9 @@ model PetugasKinerjaSurvei {
   updated_by              String?   @db.VarChar(20)
   updated_at              DateTime? @db.DateTime
   Kegiatan                Kegiatan  @relation(fields: [keg_kd], references: [kode])
+  User                    User      @relation(fields: [penilai], references: [username])
   Posisi                  Posisi    @relation(fields: [posisi_kd], references: [kode])
   Survei                  Survei    @relation(fields: [survei_kd], references: [kode])
-  User                    User      @relation(fields: [penilai], references: [username])
 }
 
 model PenugasanStruktur {
@@ -276,43 +275,45 @@ model NilaiKategoriIndikator {
   posisi_kd                 String            @db.VarChar(10)
   username                  String            @db.VarChar(20)
   kategoriIndikator_id      Int
-  nilai                     Int               @db.TinyInt
+  nilai                     Int?              @db.TinyInt
   created_by                String            @db.VarChar(20)
   created_at                DateTime          @default(now()) @db.DateTime
   updated_by                String?           @db.VarChar(20)
   updated_at                DateTime?         @db.DateTime
+  is_final                  Boolean
+  tahun                     String            @db.VarChar(4)
+  KategoriIndikator         KategoriIndikator @relation(fields: [kategoriIndikator_id], references: [kategoriIndikator_id])
   Kegiatan                  Kegiatan          @relation(fields: [keg_kd], references: [kode])
   Posisi                    Posisi            @relation(fields: [posisi_kd], references: [kode])
   Survei                    Survei            @relation(fields: [survei_kd], references: [kode])
   User                      User              @relation(fields: [username], references: [username])
-  KategoriIndikator         KategoriIndikator @relation(fields: [kategoriIndikator_id], references: [kategoriIndikator_id])
 }
 
 model RankMitra {
   rankmitra_id Int       @id @default(autoincrement())
   branch_kd    String    @db.VarChar(20)
   username     String    @db.VarChar(20)
-  User         User      @relation(fields: [username], references: [username])
   kategori_id  Int
-  nilai        Decimal?  @db.Decimal(5, 5)
-  kategori     Kategori  @relation(fields: [kategori_id], references: [kategori_id])
+  nilai        Decimal?  @db.Decimal(6, 5)
   created_by   String    @db.VarChar(20)
   created_at   DateTime  @default(now()) @db.DateTime
   updated_by   String?   @db.VarChar(20)
   updated_at   DateTime? @db.DateTime
+  kategori     Kategori  @relation(fields: [kategori_id], references: [kategori_id])
+  User         User      @relation(fields: [username], references: [username])
 }
 
 model MitraTahunKerja {
   mitratahunkerja_id Int       @id @default(autoincrement())
   branch_kd          String    @db.VarChar(20)
   username           String    @db.VarChar(20)
-  User               User      @relation(fields: [username], references: [username])
   tahun              String    @db.VarChar(4)
   status             Int       @db.TinyInt
   created_by         String    @db.VarChar(20)
   created_at         DateTime  @default(now()) @db.DateTime
   updated_by         String?   @db.VarChar(20)
   updated_at         DateTime? @db.DateTime
+  User               User      @relation(fields: [username], references: [username])
 }
 
 model RankMitraTahunKerja {
@@ -323,15 +324,15 @@ model RankMitraTahunKerja {
   posisi_kd              String    @db.VarChar(10)
   username               String    @db.VarChar(20)
   tahun                  String    @db.VarChar(4)
-  nilai                  Decimal?  @db.Decimal(5, 5)
-  Kegiatan               Kegiatan  @relation(fields: [keg_kd], references: [kode])
-  Posisi                 Posisi    @relation(fields: [posisi_kd], references: [kode])
-  Survei                 Survei    @relation(fields: [survei_kd], references: [kode])
-  User                   User      @relation(fields: [username], references: [username])
+  nilai                  Decimal?  @db.Decimal(6, 5)
   created_by             String    @db.VarChar(20)
   created_at             DateTime  @default(now()) @db.DateTime
   updated_by             String?   @db.VarChar(20)
   updated_at             DateTime? @db.DateTime
+  Kegiatan               Kegiatan  @relation(fields: [keg_kd], references: [kode])
+  Posisi                 Posisi    @relation(fields: [posisi_kd], references: [kode])
+  Survei                 Survei    @relation(fields: [survei_kd], references: [kode])
+  User                   User      @relation(fields: [username], references: [username])
 }
 
 model RankMitraPosKegSurvei {
@@ -341,13 +342,13 @@ model RankMitraPosKegSurvei {
   branch_kd                String    @db.VarChar(20)
   posisi_kd                String    @db.VarChar(10)
   username                 String    @db.VarChar(20)
-  nilai                    Decimal?  @db.Decimal(5, 5)
-  Kegiatan                 Kegiatan  @relation(fields: [keg_kd], references: [kode])
-  Posisi                   Posisi    @relation(fields: [posisi_kd], references: [kode])
-  Survei                   Survei    @relation(fields: [survei_kd], references: [kode])
-  User                     User      @relation(fields: [username], references: [username])
+  nilai                    Decimal?  @db.Decimal(6, 5)
   created_by               String    @db.VarChar(20)
   created_at               DateTime  @default(now()) @db.DateTime
   updated_by               String?   @db.VarChar(20)
   updated_at               DateTime? @db.DateTime
+  Kegiatan                 Kegiatan  @relation(fields: [keg_kd], references: [kode])
+  Posisi                   Posisi    @relation(fields: [posisi_kd], references: [kode])
+  Survei                   Survei    @relation(fields: [survei_kd], references: [kode])
+  User                     User      @relation(fields: [username], references: [username])
 }

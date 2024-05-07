@@ -84,11 +84,10 @@ type Mutation {
   createKategoriIndikator(input: KategoriIndikatorInputType!): kategoriIndikator!
   createKegSurvei(input: KegSurveiInputType!, survei: SurveiInputType): kegSurvei!
   createKegiatan(deskripsi: String!, kode: String!, nama: String!, status: Int!): kegiatan!
-  createManyIndikator(input: [IndikatorInputType!]!): Int!
   createManyPenugasanStruktur(input: PenugasanStrukturInputType!, usernames: [String]!): [penugasanStruktur]!
   createManyPetugasSurvei(input: PetugasSurveiInputType!, usernames: [String]!): [petugasSurvei]!
   createMitraTahunKerja(input: MitraTahunKerjaInputType!): mitraTahunKerja!
-  createNilaiKategoriIndikator(input: NilaiKategoriIndikatorInputType!): nilaiKategoriIndikator!
+  createNilaiKategoriIndikator(input: NilaiKategoriIndikatorInputType!): [nilaiKategoriIndikator!]!
   createPenugasanStruktur(input: PenugasanStrukturInputType!): penugasanStruktur!
   createPetugasKinerjaSurvei(input: PetugasKinerjaSurveiInputType!): petugasKinerjaSurvei!
   createPetugasSurvei(input: PetugasSurveiInputType!): petugasSurvei!
@@ -103,10 +102,12 @@ type Mutation {
   deleteKategori(id: Int!): kategori
   deleteKategoriIndikator(id: Int!): kategoriIndikator
   login(email: String!, password: String!): AuthPayload!
-  signup(email: String!, is_pegawai: Int, password: String!, role_id: Int!, username: String!): AuthPayload!
+  signup(email: String!, is_pegawai: Int, nama: String!, password: String!, role_id: Int!, tahun: String!, username: String!): AuthPayload!
   updateIndikator(id: Int!, input: IndikatorInputType!): indikator!
+  updateJumPosisiPetugasKegSurvei(id: Int!, is_confirmed: Boolean, jumlah: Int): jumPosisiPetugasKegSurvei!
   updateKategori(id: Int!, input: KategoriInputType!): kategori!
   updateKategoriIndikator(id: Int!, input: KategoriIndikatorInputType!): kategoriIndikator!
+  updateNilaiKategoriIndikator(id: Int, input: NilaiKategoriIndikatorInputType, is_final: Boolean, nilai: Int): [nilaiKategoriIndikator!]!
   updateRankMitra(id: Int!, input: RankMitraInputType!): rankMitra!
   updateRankMitraPosKegSurvei(id: Int!, input: RankMitraPosKegSurveiInputType!): rankMitraPosKegSurvei!
   updateRankMitraTahunKerja(id: Int!, input: RankMitraTahunKerjaInputType!): rankMitraTahunKerja!
@@ -114,11 +115,13 @@ type Mutation {
 
 input NilaiKategoriIndikatorInputType {
   branch_kd: String!
-  kategoriIndikator_id: Int
+  is_final: Boolean!
+  kategoriIndikator_id: [Int]!
   keg_kd: String!
-  nilai: Int
+  nilai: [Int]!
   posisi_kd: String!
   survei_kd: String!
+  tahun: String!
   username: String!
 }
 
@@ -161,25 +164,27 @@ input PosKegSurveiInputType {
 type Query {
   JumPosisiPetugasKegSurvei(id: Int): [jumPosisiPetugasKegSurvei]!
   Kategori(id: Int!): kategori!
-  KegSurvei(id: Int): [kegSurvei]!
+  KegSurvei(id: Int, keg_kd: String, survei_kd: String): [kegSurvei]!
   Kegiatan(kode: String): [kegiatan]!
   MitraTahunKerja(id: Int): [mitraTahunKerja]!
-  NilaiKategoriIndikator(id: Int): [nilaiKategoriIndikator]!
-  PenugasanStruktur(id: Int): [penugasanStruktur]!
+  NilaiKategoriIndikator(branch_kd: String, id: Int, keg_kd: String, posisi_kd: String, survei_kd: String, tahun: String, username: String): [nilaiKategoriIndikator]!
+  PenugasanStruktur(branch_kd: String, id: Int, keg_kd: String, posisi_kd: String): [penugasanStruktur]!
   PetugasKinerjaSurvei(id: Int): [petugasKinerjaSurvei]!
   PetugasSurvei(id: Int, username: String): [petugasSurvei]!
   PosKegSurvei(id: Int): [posKegSurvei]!
   Posisi(kode: String): [posisi]!
-  RankMitra(id: Int): [rankMitra]!
-  RankMitraPosKegSurvei(id: Int): [rankMitraPosKegSurvei]!
+  RankMitra(branch_kd: String, id: Int, kategori_id: String, username: String): [rankMitra]!
+  RankMitraPosKegSurvei(branch_kd: String, id: Int, keg_kd: String, posisi_kd: String, survei_kd: String, username: String): [rankMitraPosKegSurvei]!
   RankMitraTahunKerja(id: Int): [rankMitraTahunKerja]!
   Survei(kode: String): [survei]!
-  allIndikator: [indikator!]!
   allIndikatorNested: [indikatorNestedQuery!]!
   allKategori: [kategori!]!
   allKategoriIndikator: [kategoriIndikator!]!
-  indikator(id: Int!): indikator!
+  countSearchPenugasanStruktur(branch_kd: String!, keg_kd: String!, posisi_kd: String!): Int!
+  indikator(id: Int): [indikator!]!
   kategoriIndikator(id: Int!): kategoriIndikator!
+  searchJumPosisiPetugasKegSurvei(branch_kd: String!, keg_kd: String!, posisi_kd: String!, survei_kd: String!): [jumPosisiPetugasKegSurvei]!
+  searchPenugasanStruktur(branch_kd: String!, keg_kd: String!, posisi_kd: String!): [penugasanStruktur]!
   someIndikator(id: [Int!]!): [indikator!]!
 }
 
@@ -235,7 +240,7 @@ type indikatorNested {
 }
 
 type indikatorNestedQuery {
-  KategoriIndikator: [kategoriIndikatorNested]!
+  KategoriIndikator: [kategoriIndikator]!
   branch_kd: String!
   definisi: String!
   indikator_id: ID!
@@ -260,23 +265,13 @@ type jumPosisiPetugasKegSurvei {
 }
 
 type kategori {
-  KategoriIndikator: [kategoriIndikatorNested]
+  KategoriIndikator: [kategoriIndikator]
   definisi: String!
   kategori_id: ID!
   nama: String!
 }
 
 type kategoriIndikator {
-  bobot: Float
-  branch_kd: String!
-  indikator_id: ID!
-  kategoriIndikator_id: ID!
-  kategori_id: ID!
-  no_urut: Int!
-  perbandingan: String
-}
-
-type kategoriIndikatorNested {
   bobot: Float
   branch_kd: String!
   indikator: indikator
@@ -324,18 +319,20 @@ type mitraTahunKerja {
 }
 
 type nilaiKategoriIndikator {
-  KategoriIndikator: [kategoriIndikatorNested]
+  KategoriIndikator: [kategoriIndikator]
   Kegiatan: kegiatan!
   Posisi: posisi!
   Survei: survei!
   User: user!
   branch_kd: String!
+  is_final: Boolean!
   kategoriIndikator_id: Int!
   keg_kd: String!
   nilai: Int
   nilaikategoriindikator_id: ID!
   posisi_kd: String!
   survei_kd: String!
+  tahun: String!
   username: String!
 }
 
@@ -450,9 +447,11 @@ type survei {
 }
 
 type user {
+  MitraTahunKerja: [mitraTahunKerja]
   UserRole: [userRole]
   email: String!
   is_pegawai: Boolean
+  nama: String
   user_id: ID!
   username: String!
 }

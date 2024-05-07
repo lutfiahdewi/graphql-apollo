@@ -1,6 +1,6 @@
 import { objectType, extendType, intArg, nonNull, nullable, list, stringArg, inputObjectType } from "nexus";
 import { prisma } from "../context";
-const moment = require('moment');
+const moment = require("moment");
 
 export const RankMitraPosKegSurvei = objectType({
   name: "rankMitraPosKegSurvei",
@@ -54,18 +54,32 @@ export const RankMitraPosKegSurveiQuery = extendType({
       type: "rankMitraPosKegSurvei",
       args: {
         id: nullable(intArg()),
+        survei_kd: nullable(stringArg()),
+        keg_kd: nullable(stringArg()),
+        branch_kd: nullable(stringArg()),
+        posisi_kd: nullable(stringArg()),
+        username: nullable(stringArg()),
       },
       resolve(parent, args, context) {
-        if (args.id) {
+        const { id, survei_kd, keg_kd, branch_kd, posisi_kd, username, tahun } = args;
+        if (id) {
           return [
             context.prisma.rankMitraPosKegSurvei.findUnique({
               where: {
-                rankmitraposkegsurvei_id: args.id,
+                rankmitraposkegsurvei_id: id,
               },
             }),
           ];
         } else {
-          return context.prisma.rankMitraPosKegSurvei.findMany();
+          return context.prisma.rankMitraPosKegSurvei.findMany({
+            where: {
+              survei_kd,
+              keg_kd,
+              branch_kd,
+              posisi_kd,
+              username,
+            },
+          });
         }
       },
     });

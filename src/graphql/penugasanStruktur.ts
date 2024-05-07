@@ -46,17 +46,76 @@ export const PenugasanStrukturQuery = extendType({
       type: "penugasanStruktur",
       args: {
         id: nullable(intArg()),
+        keg_kd: nullable(stringArg()),
+        branch_kd: nullable(stringArg()),
+        posisi_kd: nullable(stringArg()),
       },
       resolve(parent, args, context) {
-        if (args.id) {
+        const {id, branch_kd, keg_kd, posisi_kd} = args
+        if (id) {
           return [context.prisma.penugasanStruktur.findUnique({
             where: {
-                PenugasanStruktur_id: args.id,
+                PenugasanStruktur_id: id,
+                
             },
           })];
-        } else {
+        }else if(branch_kd || keg_kd || posisi_kd){
+          return context.prisma.penugasanStruktur.findMany({
+            where:{
+              branch_kd,
+              keg_kd,
+              posisi_kd
+            }
+          })
+        } 
+        else {
           return context.prisma.penugasanStruktur.findMany();
         }
+      },
+    });
+    t.nonNull.list.nullable.field("searchPenugasanStruktur", {
+      type: "penugasanStruktur",
+      args: {
+        keg_kd: nonNull(stringArg()),
+        branch_kd: nonNull(stringArg()),
+        posisi_kd: nonNull(stringArg()),
+      },
+      resolve(parent, args, context) {
+        const { username: userName} = context;
+        if (!userName) {
+          throw new Error("Cannot post without logging in.");
+        }
+        const {keg_kd,  branch_kd, posisi_kd} = args;
+        return context.prisma.penugasanStruktur.findMany({
+          where: {
+              keg_kd,
+              branch_kd,
+              posisi_kd,
+              parent: userName,
+          }
+        });
+      },
+    });
+    t.nonNull.int("countSearchPenugasanStruktur", {
+      args: {
+        keg_kd: nonNull(stringArg()),
+        branch_kd: nonNull(stringArg()),
+        posisi_kd: nonNull(stringArg()),
+      },
+      resolve(parent, args, context) {
+        const { username: userName} = context;
+        if (!userName) {
+          throw new Error("Cannot post without logging in.");
+        }
+        const {keg_kd,  branch_kd, posisi_kd} = args;
+        return context.prisma.penugasanStruktur.count({
+          where: {
+              keg_kd,
+              branch_kd,
+              posisi_kd,
+              parent: userName,
+          }
+        });
       },
     });
   },
