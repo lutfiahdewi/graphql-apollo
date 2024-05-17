@@ -7,6 +7,10 @@ type AuthPayload {
   user: user!
 }
 
+type BatchPayload {
+  count: Int!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -101,8 +105,10 @@ type Mutation {
   deleteIndikator(id: Int!): indikator
   deleteKategori(id: Int!): kategori
   deleteKategoriIndikator(id: Int!): kategoriIndikator
+  deleteSurvei(id: Int, kode: String): survei!
+  finalizeNilaiKategoriIndikator(branch_kd: String!, is_final: Boolean!, keg_kd: String!, posisi_kd: String!, survei_kd: String!, tahun: String!): BatchPayload!
   login(email: String!, password: String!): AuthPayload!
-  signup(email: String!, is_pegawai: Int, nama: String!, password: String!, role_id: Int!, tahun: String!, username: String!): AuthPayload!
+  signup(email: String!, is_pegawai: Int!, nama: String!, password: String!, role_id: Int!, tahun: String!, username: String!): AuthPayload!
   updateIndikator(id: Int!, input: IndikatorInputType!): indikator!
   updateJumPosisiPetugasKegSurvei(id: Int!, is_confirmed: Boolean, jumlah: Int): jumPosisiPetugasKegSurvei!
   updateKategori(id: Int!, input: KategoriInputType!): kategori!
@@ -131,6 +137,7 @@ input PenugasanStrukturInputType {
   parent: String
   posisi_kd: String!
   status: Int
+  survei_kd: String!
   username: String!
 }
 
@@ -167,24 +174,25 @@ type Query {
   KegSurvei(id: Int, keg_kd: String, survei_kd: String): [kegSurvei]!
   Kegiatan(kode: String): [kegiatan]!
   MitraTahunKerja(id: Int): [mitraTahunKerja]!
-  NilaiKategoriIndikator(branch_kd: String, id: Int, keg_kd: String, posisi_kd: String, survei_kd: String, tahun: String, username: String): [nilaiKategoriIndikator]!
-  PenugasanStruktur(branch_kd: String, id: Int, keg_kd: String, posisi_kd: String): [penugasanStruktur]!
+  NilaiKategoriIndikator(branch_kd: String, id: Int, kategoriIndikator_id: Int, keg_kd: String, posisi_kd: String, survei_kd: String, tahun: String, username: String): [nilaiKategoriIndikator]!
+  PenugasanStruktur(branch_kd: String, id: Int, keg_kd: String, posisi_kd: String, survei_kd: String): [penugasanStruktur]!
   PetugasKinerjaSurvei(id: Int): [petugasKinerjaSurvei]!
   PetugasSurvei(id: Int, username: String): [petugasSurvei]!
   PosKegSurvei(id: Int): [posKegSurvei]!
   Posisi(kode: String): [posisi]!
   RankMitra(branch_kd: String, id: Int, kategori_id: String, username: String): [rankMitra]!
   RankMitraPosKegSurvei(branch_kd: String, id: Int, keg_kd: String, posisi_kd: String, survei_kd: String, username: String): [rankMitraPosKegSurvei]!
-  RankMitraTahunKerja(id: Int): [rankMitraTahunKerja]!
+  RankMitraTahunKerja(branch_kd: String, id: Int, tahun: String, username: String): [rankMitraTahunKerja]!
   Survei(kode: String): [survei]!
   allIndikatorNested: [indikatorNestedQuery!]!
   allKategori: [kategori!]!
   allKategoriIndikator: [kategoriIndikator!]!
-  countSearchPenugasanStruktur(branch_kd: String!, keg_kd: String!, posisi_kd: String!): Int!
+  countSearchPenugasanStruktur(branch_kd: String!, keg_kd: String!, posisi_kd: String!, survei_kd: String!): Int!
   indikator(id: Int): [indikator!]!
   kategoriIndikator(id: Int!): kategoriIndikator!
+  profile: user!
   searchJumPosisiPetugasKegSurvei(branch_kd: String!, keg_kd: String!, posisi_kd: String!, survei_kd: String!): [jumPosisiPetugasKegSurvei]!
-  searchPenugasanStruktur(branch_kd: String!, keg_kd: String!, posisi_kd: String!): [penugasanStruktur]!
+  searchPenugasanStruktur(branch_kd: String!, keg_kd: String!, posisi_kd: String!, survei_kd: String!): [penugasanStruktur]!
   someIndikator(id: [Int!]!): [indikator!]!
 }
 
@@ -192,6 +200,7 @@ input RankMitraInputType {
   branch_kd: String!
   kategori_id: Int!
   nilai: Float!
+  nilai_rerata: Float!
   username: String!
 }
 
@@ -206,10 +215,8 @@ input RankMitraPosKegSurveiInputType {
 
 input RankMitraTahunKerjaInputType {
   branch_kd: String!
-  keg_kd: String!
+  kategori_id: Int!
   nilai: Float
-  posisi_kd: String!
-  survei_kd: String!
   tahun: String!
   username: String!
 }
@@ -339,6 +346,7 @@ type nilaiKategoriIndikator {
 type penugasanStruktur {
   Kegiatan: kegiatan!
   Posisi: posisi!
+  Survei: survei!
   User: user!
   branch_kd: String!
   keg_kd: String!
@@ -346,6 +354,7 @@ type penugasanStruktur {
   penugasanstruktur_id: ID!
   posisi_kd: String!
   status: Int!
+  survei_kd: String!
   username: String!
 }
 
@@ -401,10 +410,13 @@ type posisi {
 type rankMitra {
   User: user!
   branch_kd: String!
+  created_at: DateTime!
   kategori: kategori!
   kategori_id: String!
   nilai: Float!
+  nilai_rerata: Float!
   rankmitra_id: ID!
+  updated_at: DateTime
   username: String!
 }
 
@@ -423,17 +435,15 @@ type rankMitraPosKegSurvei {
 }
 
 type rankMitraTahunKerja {
-  Kegiatan: kegiatan!
-  Posisi: posisi!
-  Survei: survei!
   User: user!
   branch_kd: String!
-  keg_kd: String!
+  created_at: DateTime!
+  kategori: kategori!
+  kategori_id: String!
   nilai: Float!
-  posisi_kd: String!
   rankmitratahunkerja_id: ID!
-  survei_kd: String!
   tahun: String!
+  updated_at: DateTime
   username: String!
 }
 

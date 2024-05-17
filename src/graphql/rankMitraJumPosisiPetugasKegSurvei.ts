@@ -64,14 +64,14 @@ export const RankMitraPosKegSurveiQuery = extendType({
         const { id, survei_kd, keg_kd, branch_kd, posisi_kd, username, tahun } = args;
         if (id) {
           return [
-            context.prisma.rankMitraPosKegSurvei.findUnique({
+            context.prisma.rankMitraJumPosisiPetugasKegSurvei.findUnique({
               where: {
                 rankmitraposkegsurvei_id: id,
               },
             }),
           ];
         } else {
-          return context.prisma.rankMitraPosKegSurvei.findMany({
+          return context.prisma.rankMitraJumPosisiPetugasKegSurvei.findMany({
             where: {
               survei_kd,
               keg_kd,
@@ -110,7 +110,7 @@ export const RankMitraPosKegSurveiMutation = extendType({
           throw new Error("Cannot post without logging in.");
         }
         const { survei_kd, keg_kd, posisi_kd, branch_kd, username, nilai } = args.input;
-        return context.prisma.rankMitraPosKegSurvei.create({
+        return context.prisma.rankMitraJumPosisiPetugasKegSurvei.create({
           data: {
             Survei: {
               connect: {
@@ -148,7 +148,7 @@ export const RankMitraPosKegSurveiMutation = extendType({
         }
         const rankmitraposkegsurvei_id = args.id;
         const { survei_kd, keg_kd, posisi_kd, branch_kd, username, nilai } = args.input;
-        return context.prisma.rankMitraPosKegSurvei.update({
+        return context.prisma.rankMitraJumPosisiPetugasKegSurvei.update({
           where: {
             rankmitraposkegsurvei_id,
           },

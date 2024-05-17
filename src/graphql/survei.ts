@@ -34,13 +34,13 @@ export const SurveiQuery = extendType({
       },
       resolve(parent, args, context) {
         if (args.kode) {
-          let temp: any[]=[]
+          let temp: any[] = [];
           temp.push = context.prisma.survei.findUnique({
             where: {
               kode: args.kode,
             },
           });
-          return temp
+          return temp;
         }
         return context.prisma.survei.findMany();
       },
@@ -53,7 +53,7 @@ export const SurveiMutation = extendType({
   definition(t) {
     t.nonNull.field("createSurvei", {
       type: "survei",
-      args: {input: nonNull(SurveiInputType)},
+      args: { input: nonNull(SurveiInputType) },
       resolve(parent, args, context) {
         const { username } = context;
         if (!username) {
@@ -61,7 +61,26 @@ export const SurveiMutation = extendType({
         }
         const { kode, nama, tahun, tipe, unit_kd } = args.input;
         return context.prisma.survei.create({
-          data: { kode, nama, tahun, tipe, unit_kd, created_by: username},
+          data: { kode, nama, tahun, tipe, unit_kd, created_by: username },
+        });
+      },
+    });
+    t.nonNull.field("deleteSurvei", {
+      type: "survei",
+      args: {
+        id: nullable(intArg()),
+        kode: nullable(stringArg()),
+      },
+      resolve(parent, args, context) {
+        const { username } = context;
+        if (!username) {
+          throw new Error("Cannot delete without logging in.");
+        }
+        const { id, kode } = args;
+        return context.prisma.survei.delete({
+          where: {
+            survei_id: id,
+          },
         });
       },
     });

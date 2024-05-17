@@ -129,3 +129,5 @@ if (!userId) {  // 1
 "test": "jest"
 },
 ```
+## Generate DBML from prisma schema
+source: https://notiz.dev/blog/prisma-dbml-generator

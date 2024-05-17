@@ -1,11 +1,21 @@
 import { objectType, extendType, intArg, nonNull, nullable, list, stringArg, inputObjectType } from "nexus";
 import { prisma } from "../context";
 import { Prisma } from "@prisma/client";
+import { Survei } from "./survei";
 
 export const PenugasanStruktur = objectType({
   name: "penugasanStruktur",
   definition(t) {
     t.nonNull.id("penugasanstruktur_id");
+    t.nonNull.string("survei_kd");
+    t.nonNull.field("Survei", {
+      type: "survei",
+      resolve(parent, _, context) {
+        return context.prisma.survei.findUnique({
+          where: { kode: parent.survei_kd },
+        });
+      },
+    });
     t.nonNull.string("keg_kd");
     t.nonNull.field("Kegiatan", {
       type: "kegiatan",
@@ -27,15 +37,15 @@ export const PenugasanStruktur = objectType({
     });
     t.nonNull.string("username");
     t.nonNull.field("User", {
-        type: "user",
-        resolve(parent, _, context) {
-          return context.prisma.user.findUnique({
-            where: { username: parent.username },
-          });
-        },
-      });
-    t.nonNull.string("parent")
-    t.nonNull.int("status")
+      type: "user",
+      resolve(parent, _, context) {
+        return context.prisma.user.findUnique({
+          where: { username: parent.username },
+        });
+      },
+    });
+    t.nonNull.string("parent");
+    t.nonNull.int("status");
   },
 });
 
@@ -46,29 +56,31 @@ export const PenugasanStrukturQuery = extendType({
       type: "penugasanStruktur",
       args: {
         id: nullable(intArg()),
+        survei_kd: nullable(stringArg()),
         keg_kd: nullable(stringArg()),
         branch_kd: nullable(stringArg()),
         posisi_kd: nullable(stringArg()),
       },
       resolve(parent, args, context) {
-        const {id, branch_kd, keg_kd, posisi_kd} = args
+        const { id, survei_kd, branch_kd, keg_kd, posisi_kd } = args;
         if (id) {
-          return [context.prisma.penugasanStruktur.findUnique({
-            where: {
+          return [
+            context.prisma.penugasanStruktur.findUnique({
+              where: {
                 PenugasanStruktur_id: id,
-                
-            },
-          })];
-        }else if(branch_kd || keg_kd || posisi_kd){
+              },
+            }),
+          ];
+        } else if (branch_kd || survei_kd || keg_kd || posisi_kd) {
           return context.prisma.penugasanStruktur.findMany({
-            where:{
+            where: {
               branch_kd,
+              survei_kd,
               keg_kd,
-              posisi_kd
-            }
-          })
-        } 
-        else {
+              posisi_kd,
+            },
+          });
+        } else {
           return context.prisma.penugasanStruktur.findMany();
         }
       },
@@ -77,44 +89,48 @@ export const PenugasanStrukturQuery = extendType({
       type: "penugasanStruktur",
       args: {
         keg_kd: nonNull(stringArg()),
+        survei_kd: nonNull(stringArg()),
         branch_kd: nonNull(stringArg()),
         posisi_kd: nonNull(stringArg()),
       },
       resolve(parent, args, context) {
-        const { username: userName} = context;
+        const { username: userName } = context;
         if (!userName) {
           throw new Error("Cannot post without logging in.");
         }
-        const {keg_kd,  branch_kd, posisi_kd} = args;
+        const { survei_kd, keg_kd, branch_kd, posisi_kd } = args;
         return context.prisma.penugasanStruktur.findMany({
           where: {
-              keg_kd,
-              branch_kd,
-              posisi_kd,
-              parent: userName,
-          }
+            survei_kd,
+            keg_kd,
+            branch_kd,
+            posisi_kd,
+            parent: userName,
+          },
         });
       },
     });
     t.nonNull.int("countSearchPenugasanStruktur", {
       args: {
+        survei_kd: nonNull(stringArg()),
         keg_kd: nonNull(stringArg()),
         branch_kd: nonNull(stringArg()),
         posisi_kd: nonNull(stringArg()),
       },
       resolve(parent, args, context) {
-        const { username: userName} = context;
+        const { username: userName } = context;
         if (!userName) {
           throw new Error("Cannot post without logging in.");
         }
-        const {keg_kd,  branch_kd, posisi_kd} = args;
+        const {survei_kd, keg_kd, branch_kd, posisi_kd } = args;
         return context.prisma.penugasanStruktur.count({
           where: {
-              keg_kd,
-              branch_kd,
-              posisi_kd,
-              parent: userName,
-          }
+            survei_kd,
+            keg_kd,
+            branch_kd,
+            posisi_kd,
+            parent: userName,
+          },
         });
       },
     });
@@ -124,6 +140,7 @@ export const PenugasanStrukturQuery = extendType({
 export const PenugasanStrukturInputType = inputObjectType({
   name: "PenugasanStrukturInputType",
   definition(t) {
+    t.nonNull.string("survei_kd");
     t.nonNull.string("keg_kd");
     t.nonNull.string("branch_kd");
     t.nonNull.string("posisi_kd");
@@ -140,14 +157,18 @@ export const PenugasanStrukturMutation = extendType({
       type: "penugasanStruktur",
       args: { input: nonNull(PenugasanStrukturInputType) },
       resolve(_, args, context) {
-        const { username: userName} = context;
+        const { username: userName } = context;
         if (!userName) {
           throw new Error("Cannot post without logging in.");
         }
-        const {keg_kd, posisi_kd, branch_kd, username, parent, status} = args.input;
+        const { survei_kd, keg_kd, posisi_kd, branch_kd, username, parent, status } = args.input;
         return context.prisma.penugasanStruktur.create({
           data: {
-            Kegiatan: {
+            Survei: {
+              connect: {
+                kode: survei_kd,
+              },
+            },Kegiatan: {
               connect: {
                 kode: keg_kd,
               },
@@ -158,8 +179,8 @@ export const PenugasanStrukturMutation = extendType({
                 kode: posisi_kd,
               },
             },
-            User:{
-                connect : {username}
+            User: {
+              connect: { username },
             },
             parent,
             status,
@@ -170,30 +191,35 @@ export const PenugasanStrukturMutation = extendType({
     });
     t.nonNull.list.nullable.field("createManyPenugasanStruktur", {
       type: "penugasanStruktur",
-      args: { 
+      args: {
         input: nonNull(PenugasanStrukturInputType),
         usernames: nonNull(list(nullable(stringArg()))),
       },
       resolve(_, args, context) {
-        const { username: userName} = context;
+        const { username: userName } = context;
         if (!userName) {
           throw new Error("Cannot post without logging in.");
         }
-        const {keg_kd, posisi_kd, branch_kd, parent, status} = args.input;
-        const  usernames = args.usernames
-        return createMany(keg_kd, posisi_kd, branch_kd, usernames, parent, status, userName);
+        const { survei_kd, keg_kd, posisi_kd, branch_kd, parent, status } = args.input;
+        const usernames = args.usernames;
+        return createMany(survei_kd, keg_kd, posisi_kd, branch_kd, usernames, parent, status, userName);
       },
     });
   },
 });
 
-function createMany(keg_kd:string, posisi_kd:string, branch_kd:string,   usernames:string[], parent:string, status:number, userName:string,) {
+function createMany(survei_kd: string, keg_kd: string, posisi_kd: string, branch_kd: string, usernames: string[], parent: string, status: number, userName: string) {
   return prisma.$transaction(
     async (tx) => {
-      let result=[]
+      let result = [];
       for (let i = 0; i < usernames.length; i++) {
         const temp = await tx.penugasanStruktur.create({
           data: {
+            Survei:{
+              connect:{
+                kode: survei_kd,
+              }
+            },
             Kegiatan: {
               connect: {
                 kode: keg_kd,
@@ -205,8 +231,8 @@ function createMany(keg_kd:string, posisi_kd:string, branch_kd:string,   usernam
                 kode: posisi_kd,
               },
             },
-            User:{
-                connect : {username: usernames[i]}
+            User: {
+              connect: { username: usernames[i] },
             },
             parent,
             status,

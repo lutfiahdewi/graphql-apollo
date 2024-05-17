@@ -60,6 +60,13 @@ export const NilaiKategoriIndikator = objectType({
     t.nonNull.string("tahun");
   },
 });
+export const BatchPayload = objectType({
+  name: "BatchPayload",
+  definition(t) {
+    t.nonNull.int("count");
+  },
+});
+
 
 export const NilaiKategoriIndikatorQuery = extendType({
   type: "Query",
@@ -72,12 +79,13 @@ export const NilaiKategoriIndikatorQuery = extendType({
         keg_kd: nullable(stringArg()),
         branch_kd: nullable(stringArg()),
         posisi_kd: nullable(stringArg()),
+        kategoriIndikator_id: nullable(intArg()),
         username: nullable(stringArg()),
         tahun: nullable(stringArg()),
       },
 
       resolve(parent, args, context) {
-        const { id, survei_kd, keg_kd, branch_kd, posisi_kd, username, tahun } = args;
+        const { id, survei_kd, keg_kd, branch_kd, posisi_kd, username, tahun, kategoriIndikator_id } = args;
         if (id) {
           return [
             context.prisma.nilaiKategoriIndikator.findUnique({
@@ -86,13 +94,14 @@ export const NilaiKategoriIndikatorQuery = extendType({
               },
             }),
           ];
-        } else if (survei_kd || keg_kd || branch_kd || posisi_kd || tahun) {
+        } else if (survei_kd || keg_kd || branch_kd || posisi_kd || kategoriIndikator_id || tahun) {
           return context.prisma.nilaiKategoriIndikator.findMany({
             where: {
               survei_kd,
               keg_kd,
               branch_kd,
               posisi_kd,
+              kategoriIndikator_id,
               username,
               tahun,
             },
@@ -184,10 +193,40 @@ export const NilaiKategoriIndikatorMutation = extendType({
         }
       },
     });
+    t.nonNull.field("finalizeNilaiKategoriIndikator", {
+      type: "BatchPayload",
+      args: {
+        survei_kd: nonNull(stringArg()),
+        keg_kd: nonNull(stringArg()),
+        branch_kd: nonNull(stringArg()),
+        posisi_kd: nonNull(stringArg()),
+        tahun: nonNull(stringArg()),
+        is_final: nonNull(booleanArg()),
+      },
+      resolve(parent, args, context) {
+        const { username: userName } = context;
+        if (!userName) {
+          throw new Error("Cannot post without logging in.");
+        }
+        const { survei_kd, keg_kd, branch_kd, posisi_kd, tahun, is_final } = args;
+        return context.prisma.nilaiKategoriIndikator.updateMany({
+          where: {
+            survei_kd,
+            keg_kd,
+            branch_kd,
+            posisi_kd,
+            tahun,
+          },
+          data: {
+            is_final,
+          },
+        });
+      },
+    });
   },
 });
 
-function createMany(survei_kd: string, keg_kd: string, posisi_kd: string, branch_kd: string, username: string, kategoriIndikator_id: number[], nilai: number[], is_final: boolean, tahun:string, userName: string) {
+function createMany(survei_kd: string, keg_kd: string, posisi_kd: string, branch_kd: string, username: string, kategoriIndikator_id: number[], nilai: number[], is_final: boolean, tahun: string, userName: string) {
   return prisma.$transaction(
     async (tx) => {
       let result = [];
@@ -236,7 +275,7 @@ function createMany(survei_kd: string, keg_kd: string, posisi_kd: string, branch
   );
 }
 
-function updateMany(survei_kd: string, keg_kd: string, posisi_kd: string, branch_kd: string, username: string, kategoriIndikator_id: number[], nilai: number[], is_final: boolean, tahun : string, userName: string) {
+function updateMany(survei_kd: string, keg_kd: string, posisi_kd: string, branch_kd: string, username: string, kategoriIndikator_id: number[], nilai: number[], is_final: boolean, tahun: string, userName: string) {
   return prisma.$transaction(
     async (tx) => {
       let result = [];

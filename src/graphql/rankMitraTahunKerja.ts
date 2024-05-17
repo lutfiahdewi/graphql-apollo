@@ -1,39 +1,12 @@
 import { objectType, extendType, intArg, nonNull, nullable, list, stringArg, inputObjectType } from "nexus";
 import { prisma } from "../context";
-const moment = require('moment');
+const moment = require("moment");
 
 export const RankMitraTahunKerja = objectType({
   name: "rankMitraTahunKerja",
   definition(t) {
     t.nonNull.id("rankmitratahunkerja_id");
-    t.nonNull.string("survei_kd");
-    t.nonNull.field("Survei", {
-      type: "survei",
-      resolve(parent, _, context) {
-        return context.prisma.survei.findUnique({
-          where: { kode: parent.survei_kd },
-        });
-      },
-    });
-    t.nonNull.string("keg_kd");
-    t.nonNull.field("Kegiatan", {
-      type: "kegiatan",
-      resolve(parent, _, context) {
-        return context.prisma.kegiatan.findUnique({
-          where: { kode: parent.keg_kd },
-        });
-      },
-    });
     t.nonNull.string("branch_kd");
-    t.nonNull.string("posisi_kd");
-    t.nonNull.field("Posisi", {
-      type: "posisi",
-      resolve(parent, _, context) {
-        return context.prisma.posisi.findUnique({
-          where: { kode: parent.posisi_kd },
-        });
-      },
-    });
     t.nonNull.string("username");
     t.nonNull.field("User", {
       type: "user",
@@ -45,6 +18,17 @@ export const RankMitraTahunKerja = objectType({
     });
     t.nonNull.string("tahun");
     t.nonNull.float("nilai");
+    t.nonNull.string("kategori_id");
+    t.nonNull.field("kategori", {
+      type: "kategori",
+      resolve(parent, _, context) {
+        return context.prisma.user.findUnique({
+          where: { kategori_id: parent.kategori_id },
+        });
+      },
+    });
+    t.nonNull.dateTime("created_at");
+    t.nullable.dateTime("updated_at");
   },
 });
 
@@ -55,9 +39,13 @@ export const RankMitraTahunKerjaQuery = extendType({
       type: "rankMitraTahunKerja",
       args: {
         id: nullable(intArg()),
+        branch_kd: nullable(stringArg()),
+        username: nullable(stringArg()),
+        tahun: nullable(stringArg()),
       },
       resolve(parent, args, context) {
-        if (args.id) {
+        const { id, branch_kd, username, tahun } = args;
+        if (id) {
           return [
             context.prisma.rankMitraTahunKerja.findUnique({
               where: {
@@ -65,6 +53,14 @@ export const RankMitraTahunKerjaQuery = extendType({
               },
             }),
           ];
+        } else if (branch_kd || username || tahun) {
+          return context.prisma.rankMitraTahunKerja.findMany({
+            where: {
+              branch_kd,
+              username,
+              tahun,
+            },
+          });
         } else {
           return context.prisma.rankMitraTahunKerja.findMany();
         }
@@ -76,12 +72,10 @@ export const RankMitraTahunKerjaQuery = extendType({
 export const RankMitraTahunKerjaInputType = inputObjectType({
   name: "RankMitraTahunKerjaInputType",
   definition(t) {
-    t.nonNull.string("survei_kd");
-    t.nonNull.string("keg_kd");
     t.nonNull.string("branch_kd");
-    t.nonNull.string("posisi_kd");
     t.nonNull.string("username");
     t.nonNull.string("tahun");
+    t.nonNull.int("kategori_id");
     t.nullable.float("nilai");
   },
 });
@@ -97,27 +91,15 @@ export const RankMitraTahunKerjaMutation = extendType({
         if (!userName) {
           throw new Error("Cannot post without logging in.");
         }
-        const { survei_kd, keg_kd, posisi_kd, branch_kd, username, nilai, tahun } = args.input;
+        const { branch_kd, username, kategori_id, nilai, tahun } = args.input;
         return context.prisma.rankMitraTahunKerja.create({
           data: {
-            Survei: {
-              connect: {
-                kode: survei_kd,
-              },
-            },
-            Kegiatan: {
-              connect: {
-                kode: keg_kd,
-              },
-            },
             branch_kd,
-            Posisi: {
-              connect: {
-                kode: posisi_kd,
-              },
-            },
             User: {
               connect: { username },
+            },
+            kategori: {
+              connect: { kategori_id },
             },
             tahun,
             nilai,
@@ -136,30 +118,18 @@ export const RankMitraTahunKerjaMutation = extendType({
           throw new Error("Cannot post without logging in.");
         }
         const rankmitratahunkerja_id = args.id;
-        const { survei_kd, keg_kd, posisi_kd, branch_kd, username, nilai, tahun } = args.input;
+        const { branch_kd, username, kategori_id, nilai, tahun } = args.input;
         return context.prisma.rankMitraTahunKerja.update({
           where: {
             rankmitratahunkerja_id,
           },
           data: {
-            Survei: {
-              connect: {
-                kode: survei_kd,
-              },
-            },
-            Kegiatan: {
-              connect: {
-                kode: keg_kd,
-              },
-            },
             branch_kd,
-            Posisi: {
-              connect: {
-                kode: posisi_kd,
-              },
-            },
             User: {
               connect: { username },
+            },
+            kategori: {
+              connect: { kategori_id },
             },
             tahun,
             nilai,

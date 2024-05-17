@@ -20,6 +20,9 @@ export const RankMitra = objectType({
     t.nonNull.string("kategori_id");
     t.nonNull.field({ name: "kategori", type: "kategori" });
     t.nonNull.float("nilai");
+    t.nonNull.float("nilai_rerata");
+    t.nonNull.dateTime("created_at");
+    t.nullable.dateTime("updated_at");
   },
 });
 
@@ -74,6 +77,7 @@ export const RankMitraInputType = inputObjectType({
     t.nonNull.string("username");
     t.nonNull.int("kategori_id");
     t.nonNull.float("nilai");
+    t.nonNull.float("nilai_rerata");
   },
 });
 
@@ -88,7 +92,7 @@ export const RankMitraMutation = extendType({
         if (!userName) {
           throw new Error("Cannot post without logging in.");
         }
-        const { branch_kd, username, kategori_id, nilai } = args.input;
+        const { branch_kd, username, kategori_id, nilai, nilai_rerata } = args.input;
         return context.prisma.rankMitra.create({
           data: {
             branch_kd,
@@ -99,6 +103,7 @@ export const RankMitraMutation = extendType({
               connect: { kategori_id },
             },
             nilai,
+            nilai_rerata,
             created_by: userName,
           },
           include: {
@@ -120,7 +125,7 @@ export const RankMitraMutation = extendType({
         const updated_at = nowMoment.toISOString(true);
         console.log(updated_at);
         const rankmitra_id = args.id;
-        const { branch_kd, username, kategori_id, nilai } = args.input;
+        const { branch_kd, username, kategori_id, nilai, nilai_rerata } = args.input;
         return context.prisma.rankMitra.update({
           where: {
             rankmitra_id,
@@ -134,6 +139,7 @@ export const RankMitraMutation = extendType({
               connect: { kategori_id },
             },
             nilai,
+            nilai_rerata,
             updated_by: userName,
             updated_at,
           },

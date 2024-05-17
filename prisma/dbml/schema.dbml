@@ -1,0 +1,423 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  user_id Int [pk, increment]
+  username String [unique, not null]
+  password String [not null]
+  nik String
+  nip String
+  sobat_id String
+  email String [unique, not null]
+  nama String
+  status Int
+  status_blacklist Int
+  no_hp String
+  is_agree Int
+  is_pegawai Int
+  unit_id Int
+  status_nik Int
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  MitraTahunKerja MitraTahunKerja [not null]
+  NilaiKategoriIndikator NilaiKategoriIndikator [not null]
+  PenugasanStruktur PenugasanStruktur [not null]
+  PetugasKinerjaSurvei PetugasKinerjaSurvei [not null]
+  PetugasSurvei PetugasSurvei [not null]
+  RankMitra RankMitra [not null]
+  RankMitraTahunKerja RankMitraTahunKerja [not null]
+  UserRole UserRole [not null]
+  RankMitraJumPosisiPetugasKegSurvei RankMitraJumPosisiPetugasKegSurvei [not null]
+}
+
+Table UserRole {
+  user_role_id Int [pk, increment]
+  username String [not null]
+  role_id Int [not null]
+  status Int [not null]
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  user User [not null]
+}
+
+Table Indikator {
+  indikator_id Int [pk, increment]
+  branch_kd String [not null]
+  nama String [not null]
+  is_benefit Int [not null]
+  definisi String
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  KategoriIndikator KategoriIndikator [not null]
+}
+
+Table Kategori {
+  kategori_id Int [pk, increment]
+  nama String [not null]
+  definisi String
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei [not null]
+  KategoriIndikator KategoriIndikator [not null]
+  RankMitra RankMitra [not null]
+  RankMitraTahunKerja RankMitraTahunKerja [not null]
+}
+
+Table KategoriIndikator {
+  kategoriIndikator_id Int [pk, increment]
+  branch_kd String [not null]
+  kategori_id Int [not null]
+  indikator_id Int [not null]
+  bobot Decimal
+  no_urut Int [not null]
+  perbandingan String [not null]
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  indikator Indikator [not null]
+  kategori Kategori [not null]
+  NilaiKategoriIndikator NilaiKategoriIndikator [not null]
+}
+
+Table Survei {
+  survei_id Int [pk, increment]
+  kode String [unique, not null]
+  nama String [not null]
+  tahun String [not null]
+  tipe Int [not null]
+  unit_kd String
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei [not null]
+  KegSurvei KegSurvei [not null]
+  NilaiKategoriIndikator NilaiKategoriIndikator [not null]
+  PetugasKinerjaSurvei PetugasKinerjaSurvei [not null]
+  PetugasSurvei PetugasSurvei [not null]
+  PosKegSurvei PosKegSurvei [not null]
+  PenugasanStruktur PenugasanStruktur [not null]
+  RankMitraJumPosisiPetugasKegSurvei RankMitraJumPosisiPetugasKegSurvei [not null]
+}
+
+Table Kegiatan {
+  kegiatan_id Int [pk, increment]
+  kode String [unique, not null]
+  nama String [not null]
+  deskripsi String [not null]
+  status Int [not null]
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei [not null]
+  KegSurvei KegSurvei [not null]
+  NilaiKategoriIndikator NilaiKategoriIndikator [not null]
+  PenugasanStruktur PenugasanStruktur [not null]
+  PetugasKinerjaSurvei PetugasKinerjaSurvei [not null]
+  PetugasSurvei PetugasSurvei [not null]
+  PosKegSurvei PosKegSurvei [not null]
+  RankMitraJumPosisiPetugasKegSurvei RankMitraJumPosisiPetugasKegSurvei [not null]
+}
+
+Table KegSurvei {
+  kegsurvei_id Int [pk, increment]
+  survei_kd String [not null]
+  keg_kd String [not null]
+  status Int [not null]
+  tgl_buka DateTime
+  tgl_rek_mulai DateTime
+  tgl_rek_selesai DateTime
+  tgl_mulai DateTime
+  tgl_selesai DateTime
+  is_rekrutmen Int
+  is_multi Int
+  is_confirm Boolean
+  is_add_indicator Boolean
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  Kegiatan Kegiatan [not null]
+  Survei Survei [not null]
+}
+
+Table Posisi {
+  posisi_id Int [pk, increment]
+  kode String [unique, not null]
+  nama String [not null]
+  deskripsi String [not null]
+  status Int [not null]
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei [not null]
+  NilaiKategoriIndikator NilaiKategoriIndikator [not null]
+  PenugasanStruktur PenugasanStruktur [not null]
+  PetugasKinerjaSurvei PetugasKinerjaSurvei [not null]
+  PetugasSurvei PetugasSurvei [not null]
+  PosKegSurvei PosKegSurvei [not null]
+  RankMitraJumPosisiPetugasKegSurvei RankMitraJumPosisiPetugasKegSurvei [not null]
+}
+
+Table PosKegSurvei {
+  poskegsurvei_id Int [pk, increment]
+  survei_kd String [not null]
+  keg_kd String [not null]
+  posisi_kd String [not null]
+  urutan Int
+  is_view_mitra Int
+  is_multi Int
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  Kegiatan Kegiatan [not null]
+  Posisi Posisi [not null]
+  Survei Survei [not null]
+}
+
+Table JumPosisiPetugasKegSurvei {
+  jumposisipetugaskegsurvei_id Int [pk, increment]
+  survei_kd String [not null]
+  keg_kd String [not null]
+  unit_kd String
+  branch_kd String [not null]
+  kategori_id Int [not null]
+  jumlah Int [not null]
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  is_confirmed Boolean
+  posisi_kd String [not null]
+  kategori Kategori [not null]
+  Kegiatan Kegiatan [not null]
+  Posisi Posisi [not null]
+  Survei Survei [not null]
+}
+
+Table PetugasSurvei {
+  petugassurvei_id Int [pk, increment]
+  survei_kd String [not null]
+  keg_kd String [not null]
+  branch_kd String [not null]
+  posisi_kd String [not null]
+  username String [not null]
+  status Int [not null]
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  Kegiatan Kegiatan [not null]
+  Posisi Posisi [not null]
+  Survei Survei [not null]
+  User User [not null]
+}
+
+Table PetugasKinerjaSurvei {
+  petugaskinerjasurvei_id Int [pk, increment]
+  survei_kd String [not null]
+  keg_kd String [not null]
+  branch_kd String [not null]
+  posisi_kd String [not null]
+  penilai String [not null]
+  nilai Int [not null]
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  Kegiatan Kegiatan [not null]
+  User User [not null]
+  Posisi Posisi [not null]
+  Survei Survei [not null]
+}
+
+Table PenugasanStruktur {
+  penugasanstruktur_id Int [pk, increment]
+  survei_kd String [not null]
+  keg_kd String [not null]
+  branch_kd String [not null]
+  posisi_kd String [not null]
+  username String [not null]
+  parent String [not null]
+  status Int [not null]
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  Survei Survei [not null]
+  Kegiatan Kegiatan [not null]
+  Posisi Posisi [not null]
+  User User [not null]
+}
+
+Table NilaiKategoriIndikator {
+  nilaikategoriindikator_id Int [pk, increment]
+  survei_kd String [not null]
+  keg_kd String [not null]
+  branch_kd String [not null]
+  posisi_kd String [not null]
+  username String [not null]
+  kategoriIndikator_id Int [not null]
+  nilai Int
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  is_final Boolean [not null]
+  tahun String [not null]
+  KategoriIndikator KategoriIndikator [not null]
+  Kegiatan Kegiatan [not null]
+  Posisi Posisi [not null]
+  Survei Survei [not null]
+  User User [not null]
+}
+
+Table RankMitra {
+  rankmitra_id Int [pk, increment]
+  branch_kd String [not null]
+  username String [not null]
+  kategori_id Int [not null]
+  nilai Decimal
+  nilai_rerata Decimal
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  kategori Kategori [not null]
+  User User [not null]
+}
+
+Table MitraTahunKerja {
+  mitratahunkerja_id Int [pk, increment]
+  branch_kd String [not null]
+  username String [not null]
+  tahun String [not null]
+  status Int [not null]
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  User User [not null]
+}
+
+Table RankMitraTahunKerja {
+  rankmitratahunkerja_id Int [pk, increment]
+  branch_kd String [not null]
+  username String [not null]
+  tahun String [not null]
+  nilai Decimal
+  kategori_id Int [not null]
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  kategori Kategori [not null]
+  User User [not null]
+}
+
+Table RankMitraJumPosisiPetugasKegSurvei {
+  rankmitraposkegsurvei_id Int [pk, increment]
+  survei_kd String [not null]
+  keg_kd String [not null]
+  branch_kd String [not null]
+  posisi_kd String [not null]
+  username String [not null]
+  nilai Decimal
+  created_by String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_by String
+  updated_at DateTime
+  Kegiatan Kegiatan [not null]
+  Posisi Posisi [not null]
+  Survei Survei [not null]
+  User User [not null]
+}
+
+Ref: UserRole.username > User.username [delete: Cascade]
+
+Ref: KategoriIndikator.indikator_id > Indikator.indikator_id [delete: Cascade]
+
+Ref: KategoriIndikator.kategori_id > Kategori.kategori_id [delete: Cascade]
+
+Ref: KegSurvei.keg_kd > Kegiatan.kode
+
+Ref: KegSurvei.survei_kd > Survei.kode [delete: Cascade]
+
+Ref: PosKegSurvei.keg_kd > Kegiatan.kode
+
+Ref: PosKegSurvei.posisi_kd > Posisi.kode
+
+Ref: PosKegSurvei.survei_kd > Survei.kode [delete: Cascade]
+
+Ref: JumPosisiPetugasKegSurvei.kategori_id > Kategori.kategori_id
+
+Ref: JumPosisiPetugasKegSurvei.keg_kd > Kegiatan.kode
+
+Ref: JumPosisiPetugasKegSurvei.posisi_kd > Posisi.kode
+
+Ref: JumPosisiPetugasKegSurvei.survei_kd > Survei.kode [delete: Cascade]
+
+Ref: PetugasSurvei.keg_kd > Kegiatan.kode
+
+Ref: PetugasSurvei.posisi_kd > Posisi.kode
+
+Ref: PetugasSurvei.survei_kd > Survei.kode [delete: Cascade]
+
+Ref: PetugasSurvei.username > User.username
+
+Ref: PetugasKinerjaSurvei.keg_kd > Kegiatan.kode
+
+Ref: PetugasKinerjaSurvei.penilai > User.username
+
+Ref: PetugasKinerjaSurvei.posisi_kd > Posisi.kode
+
+Ref: PetugasKinerjaSurvei.survei_kd > Survei.kode [delete: Cascade]
+
+Ref: PenugasanStruktur.survei_kd > Survei.kode [delete: Cascade]
+
+Ref: PenugasanStruktur.keg_kd > Kegiatan.kode
+
+Ref: PenugasanStruktur.posisi_kd > Posisi.kode
+
+Ref: PenugasanStruktur.username > User.username
+
+Ref: NilaiKategoriIndikator.kategoriIndikator_id > KategoriIndikator.kategoriIndikator_id
+
+Ref: NilaiKategoriIndikator.keg_kd > Kegiatan.kode
+
+Ref: NilaiKategoriIndikator.posisi_kd > Posisi.kode
+
+Ref: NilaiKategoriIndikator.survei_kd > Survei.kode [delete: Cascade]
+
+Ref: NilaiKategoriIndikator.username > User.username
+
+Ref: RankMitra.kategori_id > Kategori.kategori_id
+
+Ref: RankMitra.username > User.username
+
+Ref: MitraTahunKerja.username > User.username
+
+Ref: RankMitraTahunKerja.kategori_id > Kategori.kategori_id
+
+Ref: RankMitraTahunKerja.username > User.username
+
+Ref: RankMitraJumPosisiPetugasKegSurvei.keg_kd > Kegiatan.kode
+
+Ref: RankMitraJumPosisiPetugasKegSurvei.posisi_kd > Posisi.kode
+
+Ref: RankMitraJumPosisiPetugasKegSurvei.survei_kd > Survei.kode [delete: Cascade]
+
+Ref: RankMitraJumPosisiPetugasKegSurvei.username > User.username

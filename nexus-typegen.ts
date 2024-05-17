@@ -103,6 +103,7 @@ export interface NexusGenInputs {
     parent?: string | null; // String
     posisi_kd: string; // String!
     status?: number | null; // Int
+    survei_kd: string; // String!
     username: string; // String!
   }
   PetugasKinerjaSurveiInputType: { // input type
@@ -133,6 +134,7 @@ export interface NexusGenInputs {
     branch_kd: string; // String!
     kategori_id: number; // Int!
     nilai: number; // Float!
+    nilai_rerata: number; // Float!
     username: string; // String!
   }
   RankMitraPosKegSurveiInputType: { // input type
@@ -145,10 +147,8 @@ export interface NexusGenInputs {
   }
   RankMitraTahunKerjaInputType: { // input type
     branch_kd: string; // String!
-    keg_kd: string; // String!
+    kategori_id: number; // Int!
     nilai?: number | null; // Float
-    posisi_kd: string; // String!
-    survei_kd: string; // String!
     tahun: string; // String!
     username: string; // String!
   }
@@ -177,6 +177,9 @@ export interface NexusGenObjects {
   AuthPayload: { // root type
     token: string; // String!
     user: NexusGenRootTypes['user']; // user!
+  }
+  BatchPayload: { // root type
+    count: number; // Int!
   }
   Mutation: {};
   Query: {};
@@ -284,6 +287,7 @@ export interface NexusGenObjects {
     penugasanstruktur_id: string; // ID!
     posisi_kd: string; // String!
     status: number; // Int!
+    survei_kd: string; // String!
     username: string; // String!
   }
   petugasKinerjaSurvei: { // root type
@@ -322,10 +326,13 @@ export interface NexusGenObjects {
   }
   rankMitra: { // root type
     branch_kd: string; // String!
+    created_at: NexusGenScalars['DateTime']; // DateTime!
     kategori: NexusGenRootTypes['kategori']; // kategori!
     kategori_id: string; // String!
     nilai: number; // Float!
+    nilai_rerata: number; // Float!
     rankmitra_id: string; // ID!
+    updated_at?: NexusGenScalars['DateTime'] | null; // DateTime
     username: string; // String!
   }
   rankMitraPosKegSurvei: { // root type
@@ -339,12 +346,12 @@ export interface NexusGenObjects {
   }
   rankMitraTahunKerja: { // root type
     branch_kd: string; // String!
-    keg_kd: string; // String!
+    created_at: NexusGenScalars['DateTime']; // DateTime!
+    kategori_id: string; // String!
     nilai: number; // Float!
-    posisi_kd: string; // String!
     rankmitratahunkerja_id: string; // ID!
-    survei_kd: string; // String!
     tahun: string; // String!
+    updated_at?: NexusGenScalars['DateTime'] | null; // DateTime
     username: string; // String!
   }
   survei: { // root type
@@ -385,6 +392,9 @@ export interface NexusGenFieldTypes {
     token: string; // String!
     user: NexusGenRootTypes['user']; // user!
   }
+  BatchPayload: { // field return type
+    count: number; // Int!
+  }
   Mutation: { // field return type
     createIndikator: NexusGenRootTypes['indikator']; // indikator!
     createIndikatorNested: NexusGenRootTypes['indikatorNested']; // indikatorNested!
@@ -410,6 +420,8 @@ export interface NexusGenFieldTypes {
     deleteIndikator: NexusGenRootTypes['indikator'] | null; // indikator
     deleteKategori: NexusGenRootTypes['kategori'] | null; // kategori
     deleteKategoriIndikator: NexusGenRootTypes['kategoriIndikator'] | null; // kategoriIndikator
+    deleteSurvei: NexusGenRootTypes['survei']; // survei!
+    finalizeNilaiKategoriIndikator: NexusGenRootTypes['BatchPayload']; // BatchPayload!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     updateIndikator: NexusGenRootTypes['indikator']; // indikator!
@@ -443,6 +455,7 @@ export interface NexusGenFieldTypes {
     countSearchPenugasanStruktur: number; // Int!
     indikator: NexusGenRootTypes['indikator'][]; // [indikator!]!
     kategoriIndikator: NexusGenRootTypes['kategoriIndikator']; // kategoriIndikator!
+    profile: NexusGenRootTypes['user']; // user!
     searchJumPosisiPetugasKegSurvei: Array<NexusGenRootTypes['jumPosisiPetugasKegSurvei'] | null>; // [jumPosisiPetugasKegSurvei]!
     searchPenugasanStruktur: Array<NexusGenRootTypes['penugasanStruktur'] | null>; // [penugasanStruktur]!
     someIndikator: NexusGenRootTypes['indikator'][]; // [indikator!]!
@@ -554,6 +567,7 @@ export interface NexusGenFieldTypes {
   penugasanStruktur: { // field return type
     Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
     Posisi: NexusGenRootTypes['posisi']; // posisi!
+    Survei: NexusGenRootTypes['survei']; // survei!
     User: NexusGenRootTypes['user']; // user!
     branch_kd: string; // String!
     keg_kd: string; // String!
@@ -561,6 +575,7 @@ export interface NexusGenFieldTypes {
     penugasanstruktur_id: string; // ID!
     posisi_kd: string; // String!
     status: number; // Int!
+    survei_kd: string; // String!
     username: string; // String!
   }
   petugasKinerjaSurvei: { // field return type
@@ -611,10 +626,13 @@ export interface NexusGenFieldTypes {
   rankMitra: { // field return type
     User: NexusGenRootTypes['user']; // user!
     branch_kd: string; // String!
+    created_at: NexusGenScalars['DateTime']; // DateTime!
     kategori: NexusGenRootTypes['kategori']; // kategori!
     kategori_id: string; // String!
     nilai: number; // Float!
+    nilai_rerata: number; // Float!
     rankmitra_id: string; // ID!
+    updated_at: NexusGenScalars['DateTime'] | null; // DateTime
     username: string; // String!
   }
   rankMitraPosKegSurvei: { // field return type
@@ -631,17 +649,15 @@ export interface NexusGenFieldTypes {
     username: string; // String!
   }
   rankMitraTahunKerja: { // field return type
-    Kegiatan: NexusGenRootTypes['kegiatan']; // kegiatan!
-    Posisi: NexusGenRootTypes['posisi']; // posisi!
-    Survei: NexusGenRootTypes['survei']; // survei!
     User: NexusGenRootTypes['user']; // user!
     branch_kd: string; // String!
-    keg_kd: string; // String!
+    created_at: NexusGenScalars['DateTime']; // DateTime!
+    kategori: NexusGenRootTypes['kategori']; // kategori!
+    kategori_id: string; // String!
     nilai: number; // Float!
-    posisi_kd: string; // String!
     rankmitratahunkerja_id: string; // ID!
-    survei_kd: string; // String!
     tahun: string; // String!
+    updated_at: NexusGenScalars['DateTime'] | null; // DateTime
     username: string; // String!
   }
   survei: { // field return type
@@ -674,6 +690,9 @@ export interface NexusGenFieldTypeNames {
     token: 'String'
     user: 'user'
   }
+  BatchPayload: { // field return type name
+    count: 'Int'
+  }
   Mutation: { // field return type name
     createIndikator: 'indikator'
     createIndikatorNested: 'indikatorNested'
@@ -699,6 +718,8 @@ export interface NexusGenFieldTypeNames {
     deleteIndikator: 'indikator'
     deleteKategori: 'kategori'
     deleteKategoriIndikator: 'kategoriIndikator'
+    deleteSurvei: 'survei'
+    finalizeNilaiKategoriIndikator: 'BatchPayload'
     login: 'AuthPayload'
     signup: 'AuthPayload'
     updateIndikator: 'indikator'
@@ -732,6 +753,7 @@ export interface NexusGenFieldTypeNames {
     countSearchPenugasanStruktur: 'Int'
     indikator: 'indikator'
     kategoriIndikator: 'kategoriIndikator'
+    profile: 'user'
     searchJumPosisiPetugasKegSurvei: 'jumPosisiPetugasKegSurvei'
     searchPenugasanStruktur: 'penugasanStruktur'
     someIndikator: 'indikator'
@@ -843,6 +865,7 @@ export interface NexusGenFieldTypeNames {
   penugasanStruktur: { // field return type name
     Kegiatan: 'kegiatan'
     Posisi: 'posisi'
+    Survei: 'survei'
     User: 'user'
     branch_kd: 'String'
     keg_kd: 'String'
@@ -850,6 +873,7 @@ export interface NexusGenFieldTypeNames {
     penugasanstruktur_id: 'ID'
     posisi_kd: 'String'
     status: 'Int'
+    survei_kd: 'String'
     username: 'String'
   }
   petugasKinerjaSurvei: { // field return type name
@@ -900,10 +924,13 @@ export interface NexusGenFieldTypeNames {
   rankMitra: { // field return type name
     User: 'user'
     branch_kd: 'String'
+    created_at: 'DateTime'
     kategori: 'kategori'
     kategori_id: 'String'
     nilai: 'Float'
+    nilai_rerata: 'Float'
     rankmitra_id: 'ID'
+    updated_at: 'DateTime'
     username: 'String'
   }
   rankMitraPosKegSurvei: { // field return type name
@@ -920,17 +947,15 @@ export interface NexusGenFieldTypeNames {
     username: 'String'
   }
   rankMitraTahunKerja: { // field return type name
-    Kegiatan: 'kegiatan'
-    Posisi: 'posisi'
-    Survei: 'survei'
     User: 'user'
     branch_kd: 'String'
-    keg_kd: 'String'
+    created_at: 'DateTime'
+    kategori: 'kategori'
+    kategori_id: 'String'
     nilai: 'Float'
-    posisi_kd: 'String'
     rankmitratahunkerja_id: 'ID'
-    survei_kd: 'String'
     tahun: 'String'
+    updated_at: 'DateTime'
     username: 'String'
   }
   survei: { // field return type name
@@ -1043,13 +1068,25 @@ export interface NexusGenArgTypes {
     deleteKategoriIndikator: { // args
       id: number; // Int!
     }
+    deleteSurvei: { // args
+      id?: number | null; // Int
+      kode?: string | null; // String
+    }
+    finalizeNilaiKategoriIndikator: { // args
+      branch_kd: string; // String!
+      is_final: boolean; // Boolean!
+      keg_kd: string; // String!
+      posisi_kd: string; // String!
+      survei_kd: string; // String!
+      tahun: string; // String!
+    }
     login: { // args
       email: string; // String!
       password: string; // String!
     }
     signup: { // args
       email: string; // String!
-      is_pegawai?: number | null; // Int
+      is_pegawai: number; // Int!
       nama: string; // String!
       password: string; // String!
       role_id: number; // Int!
@@ -1113,6 +1150,7 @@ export interface NexusGenArgTypes {
     NilaiKategoriIndikator: { // args
       branch_kd?: string | null; // String
       id?: number | null; // Int
+      kategoriIndikator_id?: number | null; // Int
       keg_kd?: string | null; // String
       posisi_kd?: string | null; // String
       survei_kd?: string | null; // String
@@ -1124,6 +1162,7 @@ export interface NexusGenArgTypes {
       id?: number | null; // Int
       keg_kd?: string | null; // String
       posisi_kd?: string | null; // String
+      survei_kd?: string | null; // String
     }
     PetugasKinerjaSurvei: { // args
       id?: number | null; // Int
@@ -1153,7 +1192,10 @@ export interface NexusGenArgTypes {
       username?: string | null; // String
     }
     RankMitraTahunKerja: { // args
+      branch_kd?: string | null; // String
       id?: number | null; // Int
+      tahun?: string | null; // String
+      username?: string | null; // String
     }
     Survei: { // args
       kode?: string | null; // String
@@ -1162,6 +1204,7 @@ export interface NexusGenArgTypes {
       branch_kd: string; // String!
       keg_kd: string; // String!
       posisi_kd: string; // String!
+      survei_kd: string; // String!
     }
     indikator: { // args
       id?: number | null; // Int
@@ -1179,6 +1222,7 @@ export interface NexusGenArgTypes {
       branch_kd: string; // String!
       keg_kd: string; // String!
       posisi_kd: string; // String!
+      survei_kd: string; // String!
     }
     someIndikator: { // args
       id: number[]; // [Int!]!

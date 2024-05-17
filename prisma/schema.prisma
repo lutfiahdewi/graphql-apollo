@@ -2,40 +2,44 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 datasource db {
   provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  user_id                Int                      @id @default(autoincrement())
-  username               String                   @unique @db.VarChar(20)
-  password               String                   @db.VarChar(255)
-  nik                    String?                  @db.VarChar(20)
-  nip                    String?                  @db.VarChar(20)
-  sobat_id               String?                  @db.VarChar(20)
-  email                  String                   @unique @db.VarChar(20)
-  nama                   String?                  @db.VarChar(255)
-  status                 Int?                     @db.TinyInt
-  status_blacklist       Int?                     @db.TinyInt
-  no_hp                  String?                  @db.VarChar(20)
-  is_agree               Int?                     @db.TinyInt
-  is_pegawai             Int?                     @db.TinyInt
-  unit_id                Int?
-  status_nik             Int?                     @db.TinyInt
-  created_by             String                   @db.VarChar(20)
-  created_at             DateTime                 @default(now()) @db.DateTime
-  updated_by             String?                  @db.VarChar(20)
-  updated_at             DateTime?                @db.DateTime
-  MitraTahunKerja        MitraTahunKerja[]
-  NilaiKategoriIndikator NilaiKategoriIndikator[]
-  PenugasanStruktur      PenugasanStruktur[]
-  PetugasKinerjaSurvei   PetugasKinerjaSurvei[]
-  PetugasSurvei          PetugasSurvei[]
-  RankMitra              RankMitra[]
-  RankMitraPosKegSurvei  RankMitraPosKegSurvei[]
-  RankMitraTahunKerja    RankMitraTahunKerja[]
-  UserRole               UserRole[]
+  user_id                            Int                                  @id @default(autoincrement())
+  username                           String                               @unique @db.VarChar(20)
+  password                           String                               @db.VarChar(255)
+  nik                                String?                              @db.VarChar(20)
+  nip                                String?                              @db.VarChar(20)
+  sobat_id                           String?                              @db.VarChar(20)
+  email                              String                               @unique @db.VarChar(20)
+  nama                               String?                              @db.VarChar(255)
+  status                             Int?                                 @db.TinyInt
+  status_blacklist                   Int?                                 @db.TinyInt
+  no_hp                              String?                              @db.VarChar(20)
+  is_agree                           Int?                                 @db.TinyInt
+  is_pegawai                         Int?                                 @db.TinyInt
+  unit_id                            Int?
+  status_nik                         Int?                                 @db.TinyInt
+  created_by                         String                               @db.VarChar(20)
+  created_at                         DateTime                             @default(now()) @db.DateTime
+  updated_by                         String?                              @db.VarChar(20)
+  updated_at                         DateTime?                            @db.DateTime
+  MitraTahunKerja                    MitraTahunKerja[]
+  NilaiKategoriIndikator             NilaiKategoriIndikator[]
+  PenugasanStruktur                  PenugasanStruktur[]
+  PetugasKinerjaSurvei               PetugasKinerjaSurvei[]
+  PetugasSurvei                      PetugasSurvei[]
+  RankMitra                          RankMitra[]
+  RankMitraTahunKerja                RankMitraTahunKerja[]
+  UserRole                           UserRole[]
+  RankMitraJumPosisiPetugasKegSurvei RankMitraJumPosisiPetugasKegSurvei[]
 }
 
 model UserRole {
@@ -74,6 +78,7 @@ model Kategori {
   JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei[]
   KategoriIndikator         KategoriIndikator[]
   RankMitra                 RankMitra[]
+  RankMitraTahunKerja       RankMitraTahunKerja[]
 }
 
 model KategoriIndikator {
@@ -94,45 +99,44 @@ model KategoriIndikator {
 }
 
 model Survei {
-  survei_id                 Int                         @id @default(autoincrement())
-  kode                      String                      @unique @db.VarChar(20)
-  nama                      String                      @db.VarChar(255)
-  tahun                     String                      @db.VarChar(4)
-  tipe                      Int                         @db.TinyInt
-  unit_kd                   String?                     @db.VarChar(20)
-  created_by                String                      @db.VarChar(20)
-  created_at                DateTime                    @default(now()) @db.DateTime
-  updated_by                String?                     @db.VarChar(20)
-  updated_at                DateTime?                   @db.DateTime
-  JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei[]
-  KegSurvei                 KegSurvei[]
-  NilaiKategoriIndikator    NilaiKategoriIndikator[]
-  PetugasKinerjaSurvei      PetugasKinerjaSurvei[]
-  PetugasSurvei             PetugasSurvei[]
-  PosKegSurvei              PosKegSurvei[]
-  RankMitraPosKegSurvei     RankMitraPosKegSurvei[]
-  RankMitraTahunKerja       RankMitraTahunKerja[]
+  survei_id                          Int                                  @id @default(autoincrement())
+  kode                               String                               @unique @db.VarChar(20)
+  nama                               String                               @db.VarChar(255)
+  tahun                              String                               @db.VarChar(4)
+  tipe                               Int                                  @db.TinyInt
+  unit_kd                            String?                              @db.VarChar(20)
+  created_by                         String                               @db.VarChar(20)
+  created_at                         DateTime                             @default(now()) @db.DateTime
+  updated_by                         String?                              @db.VarChar(20)
+  updated_at                         DateTime?                            @db.DateTime
+  JumPosisiPetugasKegSurvei          JumPosisiPetugasKegSurvei[]
+  KegSurvei                          KegSurvei[]
+  NilaiKategoriIndikator             NilaiKategoriIndikator[]
+  PetugasKinerjaSurvei               PetugasKinerjaSurvei[]
+  PetugasSurvei                      PetugasSurvei[]
+  PosKegSurvei                       PosKegSurvei[]
+  PenugasanStruktur                  PenugasanStruktur[]
+  RankMitraJumPosisiPetugasKegSurvei RankMitraJumPosisiPetugasKegSurvei[]
 }
 
 model Kegiatan {
-  kegiatan_id               Int                         @id @default(autoincrement())
-  kode                      String                      @unique @db.VarChar(10)
-  nama                      String                      @db.VarChar(255)
-  deskripsi                 String                      @db.VarChar(255)
-  status                    Int                         @db.TinyInt
-  created_by                String                      @db.VarChar(20)
-  created_at                DateTime                    @default(now()) @db.DateTime
-  updated_by                String?                     @db.VarChar(20)
-  updated_at                DateTime?                   @db.DateTime
-  JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei[]
-  KegSurvei                 KegSurvei[]
-  NilaiKategoriIndikator    NilaiKategoriIndikator[]
-  PenugasanStruktur         PenugasanStruktur[]
-  PetugasKinerjaSurvei      PetugasKinerjaSurvei[]
-  PetugasSurvei             PetugasSurvei[]
-  PosKegSurvei              PosKegSurvei[]
-  RankMitraPosKegSurvei     RankMitraPosKegSurvei[]
-  RankMitraTahunKerja       RankMitraTahunKerja[]
+  kegiatan_id                        Int                                  @id @default(autoincrement())
+  kode                               String                               @unique @db.VarChar(10)
+  nama                               String                               @db.VarChar(255)
+  deskripsi                          String                               @db.VarChar(255)
+  status                             Int                                  @db.TinyInt
+  created_by                         String                               @db.VarChar(20)
+  created_at                         DateTime                             @default(now()) @db.DateTime
+  updated_by                         String?                              @db.VarChar(20)
+  updated_at                         DateTime?                            @db.DateTime
+  JumPosisiPetugasKegSurvei          JumPosisiPetugasKegSurvei[]
+  KegSurvei                          KegSurvei[]
+  NilaiKategoriIndikator             NilaiKategoriIndikator[]
+  PenugasanStruktur                  PenugasanStruktur[]
+  PetugasKinerjaSurvei               PetugasKinerjaSurvei[]
+  PetugasSurvei                      PetugasSurvei[]
+  PosKegSurvei                       PosKegSurvei[]
+  RankMitraJumPosisiPetugasKegSurvei RankMitraJumPosisiPetugasKegSurvei[]
 }
 
 model KegSurvei {
@@ -154,27 +158,26 @@ model KegSurvei {
   updated_by       String?   @db.VarChar(20)
   updated_at       DateTime? @db.DateTime
   Kegiatan         Kegiatan  @relation(fields: [keg_kd], references: [kode])
-  Survei           Survei    @relation(fields: [survei_kd], references: [kode])
+  Survei           Survei    @relation(fields: [survei_kd], references: [kode], onDelete: Cascade)
 }
 
 model Posisi {
-  posisi_id                 Int                         @id @default(autoincrement())
-  kode                      String                      @unique @db.VarChar(10)
-  nama                      String                      @db.VarChar(100)
-  deskripsi                 String                      @db.VarChar(100)
-  status                    Int                         @db.TinyInt
-  created_by                String                      @db.VarChar(20)
-  created_at                DateTime                    @default(now()) @db.DateTime
-  updated_by                String?                     @db.VarChar(20)
-  updated_at                DateTime?                   @db.DateTime
-  JumPosisiPetugasKegSurvei JumPosisiPetugasKegSurvei[]
-  NilaiKategoriIndikator    NilaiKategoriIndikator[]
-  PenugasanStruktur         PenugasanStruktur[]
-  PetugasKinerjaSurvei      PetugasKinerjaSurvei[]
-  PetugasSurvei             PetugasSurvei[]
-  PosKegSurvei              PosKegSurvei[]
-  RankMitraPosKegSurvei     RankMitraPosKegSurvei[]
-  RankMitraTahunKerja       RankMitraTahunKerja[]
+  posisi_id                          Int                                  @id @default(autoincrement())
+  kode                               String                               @unique @db.VarChar(10)
+  nama                               String                               @db.VarChar(100)
+  deskripsi                          String                               @db.VarChar(100)
+  status                             Int                                  @db.TinyInt
+  created_by                         String                               @db.VarChar(20)
+  created_at                         DateTime                             @default(now()) @db.DateTime
+  updated_by                         String?                              @db.VarChar(20)
+  updated_at                         DateTime?                            @db.DateTime
+  JumPosisiPetugasKegSurvei          JumPosisiPetugasKegSurvei[]
+  NilaiKategoriIndikator             NilaiKategoriIndikator[]
+  PenugasanStruktur                  PenugasanStruktur[]
+  PetugasKinerjaSurvei               PetugasKinerjaSurvei[]
+  PetugasSurvei                      PetugasSurvei[]
+  PosKegSurvei                       PosKegSurvei[]
+  RankMitraJumPosisiPetugasKegSurvei RankMitraJumPosisiPetugasKegSurvei[]
 }
 
 model PosKegSurvei {
@@ -191,7 +194,7 @@ model PosKegSurvei {
   updated_at      DateTime? @db.DateTime
   Kegiatan        Kegiatan  @relation(fields: [keg_kd], references: [kode])
   Posisi          Posisi    @relation(fields: [posisi_kd], references: [kode])
-  Survei          Survei    @relation(fields: [survei_kd], references: [kode])
+  Survei          Survei    @relation(fields: [survei_kd], references: [kode], onDelete: Cascade)
 }
 
 model JumPosisiPetugasKegSurvei {
@@ -211,7 +214,7 @@ model JumPosisiPetugasKegSurvei {
   kategori                     Kategori  @relation(fields: [kategori_id], references: [kategori_id])
   Kegiatan                     Kegiatan  @relation(fields: [keg_kd], references: [kode])
   Posisi                       Posisi    @relation(fields: [posisi_kd], references: [kode])
-  Survei                       Survei    @relation(fields: [survei_kd], references: [kode])
+  Survei                       Survei    @relation(fields: [survei_kd], references: [kode], onDelete: Cascade)
 }
 
 model PetugasSurvei {
@@ -228,7 +231,7 @@ model PetugasSurvei {
   updated_at       DateTime? @db.DateTime
   Kegiatan         Kegiatan  @relation(fields: [keg_kd], references: [kode])
   Posisi           Posisi    @relation(fields: [posisi_kd], references: [kode])
-  Survei           Survei    @relation(fields: [survei_kd], references: [kode])
+  Survei           Survei    @relation(fields: [survei_kd], references: [kode], onDelete: Cascade)
   User             User      @relation(fields: [username], references: [username])
 }
 
@@ -247,11 +250,12 @@ model PetugasKinerjaSurvei {
   Kegiatan                Kegiatan  @relation(fields: [keg_kd], references: [kode])
   User                    User      @relation(fields: [penilai], references: [username])
   Posisi                  Posisi    @relation(fields: [posisi_kd], references: [kode])
-  Survei                  Survei    @relation(fields: [survei_kd], references: [kode])
+  Survei                  Survei    @relation(fields: [survei_kd], references: [kode], onDelete: Cascade)
 }
 
 model PenugasanStruktur {
   penugasanstruktur_id Int       @id @default(autoincrement())
+  survei_kd            String    @db.VarChar(20)
   keg_kd               String    @db.VarChar(10)
   branch_kd            String    @db.VarChar(20)
   posisi_kd            String    @db.VarChar(10)
@@ -262,6 +266,7 @@ model PenugasanStruktur {
   created_at           DateTime  @default(now()) @db.DateTime
   updated_by           String?   @db.VarChar(20)
   updated_at           DateTime? @db.DateTime
+  Survei               Survei    @relation(fields: [survei_kd], references: [kode], onDelete: Cascade)
   Kegiatan             Kegiatan  @relation(fields: [keg_kd], references: [kode])
   Posisi               Posisi    @relation(fields: [posisi_kd], references: [kode])
   User                 User      @relation(fields: [username], references: [username])
@@ -285,7 +290,7 @@ model NilaiKategoriIndikator {
   KategoriIndikator         KategoriIndikator @relation(fields: [kategoriIndikator_id], references: [kategoriIndikator_id])
   Kegiatan                  Kegiatan          @relation(fields: [keg_kd], references: [kode])
   Posisi                    Posisi            @relation(fields: [posisi_kd], references: [kode])
-  Survei                    Survei            @relation(fields: [survei_kd], references: [kode])
+  Survei                    Survei            @relation(fields: [survei_kd], references: [kode], onDelete: Cascade)
   User                      User              @relation(fields: [username], references: [username])
 }
 
@@ -295,6 +300,7 @@ model RankMitra {
   username     String    @db.VarChar(20)
   kategori_id  Int
   nilai        Decimal?  @db.Decimal(6, 5)
+  nilai_rerata Decimal?  @db.Decimal(3, 2)
   created_by   String    @db.VarChar(20)
   created_at   DateTime  @default(now()) @db.DateTime
   updated_by   String?   @db.VarChar(20)
@@ -318,24 +324,20 @@ model MitraTahunKerja {
 
 model RankMitraTahunKerja {
   rankmitratahunkerja_id Int       @id @default(autoincrement())
-  survei_kd              String    @db.VarChar(20)
-  keg_kd                 String    @db.VarChar(10)
   branch_kd              String    @db.VarChar(20)
-  posisi_kd              String    @db.VarChar(10)
   username               String    @db.VarChar(20)
   tahun                  String    @db.VarChar(4)
   nilai                  Decimal?  @db.Decimal(6, 5)
+  kategori_id            Int
   created_by             String    @db.VarChar(20)
   created_at             DateTime  @default(now()) @db.DateTime
   updated_by             String?   @db.VarChar(20)
   updated_at             DateTime? @db.DateTime
-  Kegiatan               Kegiatan  @relation(fields: [keg_kd], references: [kode])
-  Posisi                 Posisi    @relation(fields: [posisi_kd], references: [kode])
-  Survei                 Survei    @relation(fields: [survei_kd], references: [kode])
+  kategori               Kategori  @relation(fields: [kategori_id], references: [kategori_id])
   User                   User      @relation(fields: [username], references: [username])
 }
 
-model RankMitraPosKegSurvei {
+model RankMitraJumPosisiPetugasKegSurvei {
   rankmitraposkegsurvei_id Int       @id @default(autoincrement())
   survei_kd                String    @db.VarChar(20)
   keg_kd                   String    @db.VarChar(10)
@@ -349,6 +351,6 @@ model RankMitraPosKegSurvei {
   updated_at               DateTime? @db.DateTime
   Kegiatan                 Kegiatan  @relation(fields: [keg_kd], references: [kode])
   Posisi                   Posisi    @relation(fields: [posisi_kd], references: [kode])
-  Survei                   Survei    @relation(fields: [survei_kd], references: [kode])
+  Survei                   Survei    @relation(fields: [survei_kd], references: [kode], onDelete: Cascade)
   User                     User      @relation(fields: [username], references: [username])
 }

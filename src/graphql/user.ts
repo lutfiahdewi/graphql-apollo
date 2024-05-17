@@ -1,4 +1,5 @@
 import { booleanArg, extendType, nonNull, nullable, objectType, stringArg } from "nexus";
+import { prisma } from "../context";
 
 export const User = objectType({
   name: "user",
@@ -32,27 +33,22 @@ export const User = objectType({
   },
 });
 
-/*
-export const UserMutation = extendType({
-  type: "Mutation",
+export const UserQuery = extendType({
+  type: "Query",
   definition(t) {
-    t.nonNull.field("creatUser", {
+    t.nonNull.field("profile", {
       type: "user",
-      args: { username: nonNull(stringArg()), email: nonNull(stringArg()), password: nonNull(stringArg()), is_pegawai: nullable(booleanArg()) },
       resolve(parent, args, context, info) {
-        const { username, email, password, is_pegawai } = args;
-        return context.prisma.user.create({
-          data: {
+        const { username } = context;
+        if (!username) {
+          throw new Error("Cannot get profile without logging in.");
+        }
+        return prisma.user.findUnique({
+          where: {
             username,
-            email,
-            password,
-            is_pegawai,
-            created_by: username,
           },
         });
       },
     });
-
-    //update delete
   },
-});*/
+});

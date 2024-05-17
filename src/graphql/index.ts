@@ -17,6 +17,6 @@ export * from "./nilaiKategoriIndikator"
 export * from "./mitraTahunKerja"
 export * from "./rankMitra"
 export * from "./rankMitraTahunKerja"
-export * from "./rankMitraPosKegSurvei"
+export * from "./rankMitraJumPosisiPetugasKegSurvei"
 
 export * from "./scalars/Date";
