@@ -77,11 +77,21 @@ export const SurveiMutation = extendType({
           throw new Error("Cannot delete without logging in.");
         }
         const { id, kode } = args;
-        return context.prisma.survei.delete({
-          where: {
-            survei_id: id,
-          },
-        });
+        if (id) {
+          return context.prisma.survei.delete({
+            where: {
+              survei_id: id,
+            },
+          });
+        } else if (kode) {
+          return context.prisma.survei.delete({
+            where: {
+              kode,
+            },
+          });
+        } else {
+          throw new Error("Atleast give one input of 'survei_id' or 'kode'");
+        }
       },
     });
   },

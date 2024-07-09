@@ -100,6 +100,7 @@ mutation ($email: String!, $password: String!, $username: String!, $is_pegawai: 
 <br>
 
 ## Add authentication
+
 <p>Add resolvers part add this code:</p>
 
 ```bash
@@ -110,8 +111,8 @@ if (!userId) {  // 1
 ```
 
 ## Authorization
-<p>Please login and get the token. Then, add the token in header, choose auth. </p>
 
+<p>Please login and get the token. Then, add the token in header, choose auth. </p>
 
 ## Script config
 
@@ -129,5 +130,12 @@ if (!userId) {  // 1
 "test": "jest"
 },
 ```
+
 ## Generate DBML from prisma schema
-source: https://notiz.dev/blog/prisma-dbml-generator
+
+Generating prisma client would also generate DBML that can be use to generate diagram such as ERD.
+Source: https://notiz.dev/blog/prisma-dbml-generator
+https://www.npmjs.com/package/prisma-dbml-generator
+```
+npm install -D prisma-dbml-generator
+```

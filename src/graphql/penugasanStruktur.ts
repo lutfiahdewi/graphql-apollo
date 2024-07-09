@@ -1,7 +1,6 @@
 import { objectType, extendType, intArg, nonNull, nullable, list, stringArg, inputObjectType } from "nexus";
 import { prisma } from "../context";
 import { Prisma } from "@prisma/client";
-import { Survei } from "./survei";
 
 export const PenugasanStruktur = objectType({
   name: "penugasanStruktur",
