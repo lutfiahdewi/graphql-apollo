@@ -1,5 +1,14 @@
 # GraphQL API build in Apollo Server
 
+This app using build using nexus to make the GraphQL schema from the code. Developer should write the code first, then nexus would generate the schema. Run this code to generate the schema:
+```bash
+npm run generate
+```
+Further details:
+ * GraphQL API (TS + apollo): https://www.howtographql.com/typescript-apollo/0-introduction/
+ * Nexus for code generator : https://nexusjs.org/docs/
+ * Prisma for ORM : https://www.prisma.io/docs/orm
+
 ## Build and Run App
 
 ```bash
@@ -15,15 +24,15 @@ npx prisma generate
 ```
 
 <p>
-There are two version of apollo server, v3 and v4. Currently transitioning from v3 to v4, so both version are kept. For running Apollo Server v3:
+There are two version of apollo server, v3 and v4. Currently transitioning from v3 to v4. For running Apollo Server v3:
 </p>
 
 ```bash
 npm run dev
 ```
-
+**(THIS APP USING v4)**
 <p>
-For running Apollo Server v4:
+For running Apollo Server v4 :
 </p>
 
 ```bash
@@ -38,17 +47,24 @@ script:
 npx prisma migrate dev --name 'added-tags'
 ```
 
-## Sets Database for Prisma
+## Set Database for Prisma
 
-make .env and read docs :v
+Make .env to set connection to the database. This app using SQL Server and database "sobat". Example env file for setting database connection to SQL Server using windows login:
+```bash
+DATABASE_URL = sqlserver://localhost:1433;database=sobat;integratedSecurity=true;trustServerCertificate=true;
+```
+
+## Set .env file
+
+Make an .env file to store DATABASE_URL for accessing database and APP_SECRET for generating JWT.
 
 ## Generate GraphQL query and testing
 
 use package GraphQL Generator or install it as chrome extension : https://chrome.google.com/webstore/detail/graphql-query-generator/jmdpimbhelkmbpgdkjgapkegfapaapej
 
-## Query
+## Example Query
 
-## Mutation
+## Example Mutation
 
 ### Create
 
@@ -114,22 +130,6 @@ if (!userId) {  // 1
 
 <p>Please login and get the token. Then, add the token in header, choose auth. </p>
 
-## Script config
-
-```bash
-"scripts": {
-"test": "echo \"Error: no test specified\" && exit 1",
-"dev": "ts-node-dev --transpile-only --no-notify --exit-child src/index.ts",
-"generate": "ts-node --transpile-only src/schema.ts"
-},
-
-"scripts": {
-"compile": "tsc",
-"dev": "ts-node-dev --respawn ./src/index.ts",
-"start": "npm run compile && nodemon ./dist/index.js",
-"test": "jest"
-},
-```
 
 ## Generate DBML from prisma schema
 

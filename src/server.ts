@@ -3,6 +3,7 @@ import { startStandaloneServer } from '@apollo/server/standalone'
 import { schema } from './schema'
 import { Context, createContext } from './context'
 
+// Setting for apollo server v4
 const start = async () => {
   const server = new ApolloServer<Context>({ schema })
 
